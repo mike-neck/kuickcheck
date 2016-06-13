@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.2'
+    }
+}
+
+ext {
+    kotlinVersion = '1.0.2'
+    jdk = '1.8'
+    encoding = 'UTF-8'
+}
+
+subprojects {
+    apply plugin: 'kotlin'
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    }
+}
+
+project(':core') {
+    dependencies {
+        compile 'org.jetbrains.kotlin:kotlin-reflect:1.0.2'
+        testCompile 'junit:junit:4.12'
+    }
+}
+
+project(':example') {
+    dependencies {
+        testCompile project(':core')
+    }
+
+    task showRuntime {
+        doLast {
+            sourceSets.test.runtimeClasspath.each {
+                println it
+            }
+        }
+    }
+
+    task kuickcheck(type: JavaExec, description: 'Run checks') {
+        classpath sourceSets.test.runtimeClasspath
+        main = 'org.mikeneck.kuickcheck.KuickCheck'
+        standardOutput = System.out
+        args '--debug'
+    }
+}
