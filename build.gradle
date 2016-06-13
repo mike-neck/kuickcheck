@@ -13,8 +13,14 @@ ext {
     encoding = 'UTF-8'
 }
 
+group = 'org.mikeneck'
+version = '0.1'
+
 subprojects {
     apply plugin: 'kotlin'
+
+    group = parent.group
+    version = parent.version
 
     repositories {
         jcenter()
@@ -26,9 +32,73 @@ subprojects {
 }
 
 project(':core') {
+    apply plugin: 'maven'
+    apply plugin: 'signing'
+
     dependencies {
-        compile 'org.jetbrains.kotlin:kotlin-reflect:1.0.2'
+        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         testCompile 'junit:junit:4.12'
+    }
+
+    jar {
+        baseName = parent.name
+        appendix = project.name
+    }
+
+    task javadocJar(type: Jar) {
+        baseName = project.parent.name
+        appendix = project.name
+        classifier = 'javadoc'
+        from tasks.javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives tasks.javadocJar, tasks.sourcesJar
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment {MavenDeployment deployment ->
+                    signing.signPom(deployment)
+                }
+                repository (url: sonatypeUrl) {
+                    authentication(userName: sonatypeUsername, password: sonatypePassword)
+                }
+                pom.project {
+                    name 'KuickCheck'
+                    packaging 'jar'
+                    description 'Property based testing framework for Kotlin'
+                    url 'https://github.com/mike-neck/kuickcheck'
+
+                    scm {
+                        connection 'scm:git:https://github.com/mike-neck/kuickcheck'
+                        developerConnection 'scm:git:https://github.com/mike-neck/kuickcheck'
+                        url 'https://github.com/mike-neck/kuickcheck'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache Software License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'mikeneck'
+                            name 'Shinya Mochida'
+                            email 'jkrt3333[at]gmail.com'
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
