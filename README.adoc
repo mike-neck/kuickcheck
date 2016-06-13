@@ -1,0 +1,53 @@
+= kuickcheck
+
+KuickCheck is a property based testing framework for https://kotlinlang.org/[Kotlin] inspired by another property based testing frameworks, especially https://github.com/rickynils/scalacheck[scalacheck], https://pholser.github.io/junit-quickcheck/site/0.6/index.html[junit-quickcheck].KuickCheck has no external dependencies other than Kotlin runtime and Kotlin reflection.
+
+= Download
+
+KuickCheck is published to Maven Central, so you can get the latest version by adding the dependency to pom.xml or build.gradle.
+
+Currently KuickCheck is not published, so download or clone this project to your machine.
+
+.Maven
+[source, xml]
+----
+<dependency>
+  <groupId>org.mikeneck</groupId>
+  <artifactId>kuickcheck</artifactId>
+</dependency>
+----
+
+.Gradle
+[source,groovy]
+----
+dependencies {
+  testCompile 'org.mikeneck:kuickcheck'
+}
+----
+
+= Writing Test
+
+Writing test is very easy.
+
+1. Create class or singleton object.
+1. Prepare your test data with `Generator`(in the sample code it will be prepared by `positiveInt` phrase) and pass it to `forAll` method.
+1. Write the property for the data at `satisfy` block.
+1. Give the name to the property as read-only field name.
+1. Annotate the property with `@Property`.
+
+Then KuickCheck will run check for the property 100 times as default.
+
+.Sample Code
+[source, kotlin]
+----
+object GettingStarted {
+
+  @Property
+  val positiveNumberIsMoreThan0 =
+      forAll(positiveInt).satisfy{ it > 0 }
+}
+----
+
+= License
+
+Apache2[http://www.apache.org/licenses/LICENSE-2.0]
