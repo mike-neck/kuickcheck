@@ -18,9 +18,19 @@ package org.mikeneck.example
 import org.mikeneck.kuickcheck.Property
 import org.mikeneck.kuickcheck.forAll
 import org.mikeneck.kuickcheck.int
+import org.mikeneck.kuickcheck.long
 
 class InClass {
 
     @Property
     val allMultiplesOf4AreMultiplesOf2 = forAll(int).filter { it % 4 == 0 }.satisfy { it % 2 == 0 }
+
+    @Property
+    val negativeValueHasSameAbsoluteValue = forAll(long).satisfy { Math.abs(it) == Math.abs(-it) }
+
+    @Property
+    val `naturalNumberIsMoreThan0(fail)` = forAll(int(0, 30)).satisfy { it > 0 }
+
+    @Property
+    val throwsExceptionIf30Comes = forAll(long(20L, 40L)).satisfy { if (it == 30L) throw  RuntimeException("$it comes.") else true}
 }

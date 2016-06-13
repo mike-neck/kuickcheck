@@ -26,15 +26,10 @@ object GettingStarted {
     val negativeValueIsSmallerThan0With200Times = forAll(negativeInt).satisfy { it < 0 } * 200
 
     @Property
-    val negativeValueHasSameAbsoluteValue = forAll(long).satisfy { Math.abs(it) == Math.abs(-it) }
-
-    @Property
     val valueCanBeDevidedBy10IsMultipleOf5 =
             forAll(positiveLongFrom0).filter { it % 10 == 0.toLong() }.satisfy { it % 5 == 0.toLong() }
 
     @Property
-    val `naturalNumberIsMoreThan0(fail)` = forAll(int(0, 30)).satisfy { it > 0 }
-
-    @Property
-    val throwsExceptionIf30Comes = forAll(long(20L, 40L)).satisfy { if (it == 30L) throw  RuntimeException("$it comes.") else true}
+    val `positiveInt x negativeInt becomes negative` =
+            forAll(positiveInt, negativeInt).satisfy { l, r -> l * r < 0 }
 }

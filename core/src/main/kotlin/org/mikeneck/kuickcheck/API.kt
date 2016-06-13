@@ -17,7 +17,9 @@ package org.mikeneck.kuickcheck
 
 import org.mikeneck.kuickcheck.generator.IntGenerator
 import org.mikeneck.kuickcheck.generator.LongGenerator
+import org.mikeneck.kuickcheck.prediction.DoubleParameterPrediction
 import org.mikeneck.kuickcheck.prediction.SingleParameterPrediction
+import org.mikeneck.kuickcheck.prediction.doubleParameterPrediction
 import org.mikeneck.kuickcheck.prediction.singleParameterPrediction
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
@@ -64,6 +66,9 @@ object KuickCheck {
 }
 
 fun <T> forAll(generator: Generator<T>): SingleParameterPrediction<T> = singleParameterPrediction(generator)
+
+fun <T, U> forAll(gen1: Generator<T>, gen2: Generator<U>): DoubleParameterPrediction<T, U> =
+        doubleParameterPrediction(gen1, gen2)
 
 val int: IntGenerator = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
 

@@ -15,58 +15,11 @@
  */
 package org.mikeneck.kuickcheck.prediction
 
-import org.mikeneck.kuickcheck.Checker
 import org.mikeneck.kuickcheck.Checker2
 import org.mikeneck.kuickcheck.Generator
 
-interface SingleParameterPrediction<T> {
-    fun satisfy(predicate: (T) -> Boolean): Checker<T>
-    fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T>
-}
-
-internal fun <T> singleParameterPrediction(generator: Generator<T>): SingleParameterPrediction<T> =
-        SingleParamPrediction(generator)
-
-class SingleParamPrediction<T>
-        (val generator: Generator<T>, val repeatTime: Int = 100)
-        : SingleParameterPrediction<T> {
-
-    override fun satisfy(predicate: (T) -> Boolean): Checker<T> {
-        return object: Checker<T> {
-            override val repeat: Int = repeatTime
-            override fun testData(): T = generator.generate()
-            override fun consume(p: T): Boolean = predicate.invoke(p)
-        }
-    }
-
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> =
-            SingleFilteredParamPrediction(generator, condition, repeatTime)
-}
-
-class SingleFilteredParamPrediction<T>
-        (val generator: Generator<T>, val condition: (T) -> Boolean, val repeatTime: Int = 100)
-        : SingleParameterPrediction<T> {
-
-    override fun satisfy(predicate: (T) -> Boolean): Checker<T> {
-        return object: Checker<T> {
-            override fun testData(): T {
-                while (true) {
-                    val t: T = generator.generate()
-                    if (condition.invoke(t)) return t
-                }
-            }
-            override fun consume(p: T): Boolean = predicate.invoke(p)
-            override val repeat: Int = repeatTime
-        }
-    }
-
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> {
-        val con: (T) -> Boolean = {t ->
-            this.condition.invoke(t) && condition.invoke(t)
-        }
-        return SingleFilteredParamPrediction(this.generator, con, this.repeatTime)
-    }
-}
+fun <T, U> doubleParameterPrediction(gen1: Generator<T>, gen2: Generator<U>): DoubleParameterPrediction<T, U> =
+        DoubleArgumentPrediction(gen1, gen2)
 
 interface DoubleParameterPrediction<T, U> {
     fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U>
@@ -74,8 +27,8 @@ interface DoubleParameterPrediction<T, U> {
 }
 
 class DoubleArgumentPrediction<T, U>
-        (val gen1: Generator<T>, val gen2: Generator<U>, val repeatTime: Int = 100)
-        : DoubleParameterPrediction<T, U>{
+(val gen1: Generator<T>, val gen2: Generator<U>, val repeatTime: Int = 100)
+: DoubleParameterPrediction<T, U>{
 
     override fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U> {
         return object: Checker2<T, U> {
@@ -92,8 +45,8 @@ class DoubleArgumentPrediction<T, U>
 }
 
 class DoubleArgumentFilteredPrediction<T, U>
-        (val gen1: Generator<T>, val gen2: Generator<U>, val condition: (T, U) -> Boolean, val repeatTime: Int = 100)
-        : DoubleParameterPrediction<T, U> {
+(val gen1: Generator<T>, val gen2: Generator<U>, val condition: (T, U) -> Boolean, val repeatTime: Int = 100)
+: DoubleParameterPrediction<T, U> {
 
     override fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U> {
         return object: Checker2<T, U> {
