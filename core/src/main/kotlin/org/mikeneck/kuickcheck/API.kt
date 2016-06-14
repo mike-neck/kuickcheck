@@ -15,6 +15,7 @@
  */
 package org.mikeneck.kuickcheck
 
+import org.mikeneck.kuickcheck.generator.BooleanGenerator
 import org.mikeneck.kuickcheck.generator.IntGenerator
 import org.mikeneck.kuickcheck.generator.LongGenerator
 import org.mikeneck.kuickcheck.prediction.DoubleParameterPrediction
@@ -69,6 +70,12 @@ fun <T> forAll(generator: Generator<T>): SingleParameterPrediction<T> = singlePa
 
 fun <T, U> forAll(gen1: Generator<T>, gen2: Generator<U>): DoubleParameterPrediction<T, U> =
         doubleParameterPrediction(gen1, gen2)
+
+val boolean: Generator<Boolean> = BooleanGenerator()
+
+val alwaysTrue: Generator<Boolean> = BooleanGenerator(true)
+
+val alwaysFalse: Generator<Boolean> = BooleanGenerator(false)
 
 val int: IntGenerator = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
 
