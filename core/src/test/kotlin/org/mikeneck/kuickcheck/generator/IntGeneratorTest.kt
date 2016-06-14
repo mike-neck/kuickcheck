@@ -26,7 +26,8 @@ class IntGeneratorTest {
 
     @Test
     fun maxEqualsToMin() {
-        IntGenerator(1, 1)
+        val generator = IntGenerator(1, 1)
+        1.rangeTo(100).forEach { assert(generator.generate() == 1) }
     }
 
     @Test

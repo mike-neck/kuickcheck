@@ -77,26 +77,28 @@ val alwaysTrue: Generator<Boolean> = BooleanGenerator(true)
 
 val alwaysFalse: Generator<Boolean> = BooleanGenerator(false)
 
-val int: IntGenerator = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
+val int: Generator<Int> = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
 
-val positiveInt: IntGenerator = IntGenerator(1, Int.MAX_VALUE)
+fun int(only: Int): Generator<Int> = IntGenerator(only, only)
 
-val positiveIntFrom0: IntGenerator = IntGenerator(0, Int.MAX_VALUE)
+val positiveInt: Generator<Int> = IntGenerator(1, Int.MAX_VALUE)
 
-val negativeInt: IntGenerator = IntGenerator(Int.MIN_VALUE, -1)
+val positiveIntFrom0: Generator<Int> = IntGenerator(0, Int.MAX_VALUE)
 
-val negativeIntTo0: IntGenerator = IntGenerator(Int.MIN_VALUE, 0)
+val negativeInt: Generator<Int> = IntGenerator(Int.MIN_VALUE, -1)
 
-fun int(min: Int, max: Int): IntGenerator = IntGenerator(min, max)
+val negativeIntTo0: Generator<Int> = IntGenerator(Int.MIN_VALUE, 0)
 
-val long: LongGenerator = LongGenerator(Long.MIN_VALUE, Long.MAX_VALUE)
+fun int(min: Int, max: Int): Generator<Int> = IntGenerator(min, max)
 
-val positiveLong: LongGenerator = LongGenerator(1, Long.MAX_VALUE)
+val long: Generator<Long> = LongGenerator(Long.MIN_VALUE, Long.MAX_VALUE)
 
-val positiveLongFrom0: LongGenerator = LongGenerator(0, Long.MAX_VALUE)
+val positiveLong: Generator<Long> = LongGenerator(1, Long.MAX_VALUE)
 
-val negativeLong: LongGenerator = LongGenerator(Long.MIN_VALUE, -1)
+val positiveLongFrom0: Generator<Long> = LongGenerator(0, Long.MAX_VALUE)
 
-val negativeLongTo0: LongGenerator = LongGenerator(Long.MIN_VALUE, 0)
+val negativeLong: Generator<Long> = LongGenerator(Long.MIN_VALUE, -1)
 
-fun long(min: Long, max: Long): LongGenerator = LongGenerator(min, max)
+val negativeLongTo0: Generator<Long> = LongGenerator(Long.MIN_VALUE, 0)
+
+fun long(min: Long, max: Long): Generator<Long> = LongGenerator(min, max)
