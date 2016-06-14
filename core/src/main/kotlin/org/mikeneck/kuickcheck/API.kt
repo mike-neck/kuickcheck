@@ -16,6 +16,7 @@
 package org.mikeneck.kuickcheck
 
 import org.mikeneck.kuickcheck.generator.BooleanGenerator
+import org.mikeneck.kuickcheck.generator.CharGenerator
 import org.mikeneck.kuickcheck.generator.IntGenerator
 import org.mikeneck.kuickcheck.generator.LongGenerator
 import org.mikeneck.kuickcheck.prediction.DoubleParameterPrediction
@@ -102,3 +103,24 @@ val negativeLong: Generator<Long> = LongGenerator(Long.MIN_VALUE, -1)
 val negativeLongTo0: Generator<Long> = LongGenerator(Long.MIN_VALUE, 0)
 
 fun long(min: Long, max: Long): Generator<Long> = LongGenerator(min, max)
+
+val char: Generator<Char> = CharGenerator(Character.MIN_VALUE, Character.MAX_VALUE)
+
+fun char(ch: Char): Generator<Char> = CharGenerator(ch, ch)
+
+fun char(vararg chars: Char): Generator<Char> = CharGenerator(chars)
+
+fun char(chars: String): Generator<Char> = CharGenerator(chars)
+
+fun charInRange(c1: Char, c2: Char): Generator<Char> = CharGenerator(c1, c2)
+
+val largeLetterChar: Generator<Char> = charInRange('A', 'Z')
+
+val smallLetterChar: Generator<Char> = charInRange('a', 'z')
+
+val numericChar: Generator<Char> = charInRange('0', '9')
+
+val alphaNumericChar: Generator<Char> = largeLetterChar + smallLetterChar + numericChar
+
+infix operator fun Generator<Char>.plus(o: Generator<Char>): Generator<Char> =
+        (this as CharGenerator) + (o as CharGenerator)

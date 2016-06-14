@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mikeneck.example
+package org.mikeneck.example.java.lang
 
-import org.mikeneck.kuickcheck.Property
-import org.mikeneck.kuickcheck.boolean
-import org.mikeneck.kuickcheck.forAll
+import org.mikeneck.kuickcheck.*
 
-object BooleanCheck {
+class CharacterCheck {
 
     @Property
-    val materialImplication = forAll(boolean, boolean).satisfy { p, q -> (p && q) `→` p }
-
-    infix fun Boolean.`→`(other: Boolean): Boolean = !this || other
+    val numbersRepresentedByHexCharIsSmallerThan16 =
+            forAll(numericChar + charInRange('a', 'f'))
+                    .satisfy { Integer.parseInt(String(charArrayOf(it)), 16) < 16 }
 }
