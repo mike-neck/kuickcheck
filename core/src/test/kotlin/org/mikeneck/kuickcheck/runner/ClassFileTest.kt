@@ -16,24 +16,48 @@
 package org.mikeneck.kuickcheck.runner
 
 import org.junit.Test
+import org.junit.experimental.theories.DataPoints
+import org.junit.experimental.theories.Theories
+import org.junit.experimental.theories.Theory
+import org.junit.runner.RunWith
+import org.mikeneck.kuickcheck.InputAndExpect
 
 class ClassFileTest {
 
-    val classFile: ClassFile = ClassFileImpl()
-
     @Test
     fun onlyNumberIsClosure() {
-        assert(classFile.verifyNotClosure("1") == false)
-        assert(classFile.verifyNotClosure("2") == false)
+        assert(ClassFile.verifyNotClosure("1") == false)
+        assert(ClassFile.verifyNotClosure("2") == false)
     }
 
     @Test
     fun onlyStringIsNotClosure() {
-        assert(classFile.verifyNotClosure("GettingStarted") == true)
+        assert(ClassFile.verifyNotClosure("GettingStarted") == true)
     }
 }
 
-class ClassFileImpl: ClassFile {
-    override fun isNotClosure(): Boolean = true
-    override fun toQualifiedClassName(): String = ""
+@RunWith(Theories::class)
+class IsNotClosure {
+
+    companion object {
+        @DataPoints
+        @JvmField val entries: Array<InputAndExpect<String, Boolean>> = arrayOf(
+                InputAndExpect("com/sample/compile/Bar${'$'}DefaultImpls.class", true),
+                InputAndExpect("com/sample/compile/Bar.class", true),
+                InputAndExpect("com/sample/compile/Color${'$'}BLACK.class", true),
+                InputAndExpect("com/sample/compile/Color${'$'}BLUE.class", true),
+                InputAndExpect("com/sample/compile/Color${'$'}WHITE.class", true),
+                InputAndExpect("com/sample/compile/Color.class", true),
+                InputAndExpect("com/sample/compile/Compile_sampleKt.class", true),
+                InputAndExpect("com/sample/compile/Foo${'$'}Companion${'$'}WhenMappings.class", true),
+                InputAndExpect("com/sample/compile/Foo${'$'}Companion.class", true),
+                InputAndExpect("com/sample/compile/Foo${'$'}upper${'$'}1.class", false),
+                InputAndExpect("com/sample/compile/Foo.class", true)
+        )
+    }
+
+    @Theory fun test(ie: InputAndExpect<String, Boolean>) {
+        val classFile = ZipClassFile(ie.input)
+        assert(classFile.isNotClosure() == ie.expect)
+    }
 }
