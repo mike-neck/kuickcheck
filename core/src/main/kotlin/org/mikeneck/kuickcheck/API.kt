@@ -15,10 +15,7 @@
  */
 package org.mikeneck.kuickcheck
 
-import org.mikeneck.kuickcheck.generator.BooleanGenerator
-import org.mikeneck.kuickcheck.generator.CharGenerator
-import org.mikeneck.kuickcheck.generator.IntGenerator
-import org.mikeneck.kuickcheck.generator.LongGenerator
+import org.mikeneck.kuickcheck.generator.*
 import org.mikeneck.kuickcheck.prediction.DoubleParameterPrediction
 import org.mikeneck.kuickcheck.prediction.SingleParameterPrediction
 import org.mikeneck.kuickcheck.prediction.doubleParameterPrediction
@@ -124,3 +121,11 @@ val alphaNumericChar: Generator<Char> = largeLetterChar + smallLetterChar + nume
 
 infix operator fun Generator<Char>.plus(o: Generator<Char>): Generator<Char> =
         (this as CharGenerator) + (o as CharGenerator)
+
+val string: Generator<String> = AllStringGenerator()
+
+fun string(size: Int): Generator<String> = AllStringGenerator(size)
+
+fun string(str: String): Generator<String> = StringGenerator(str)
+
+fun string(str: String, size: Int): Generator<String> = StringGenerator(str, size)
