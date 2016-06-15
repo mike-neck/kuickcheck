@@ -16,6 +16,7 @@
 package org.mikeneck.kuickcheck.generator
 
 import org.junit.Test
+import org.mikeneck.kuickcheck.generator.internal.NormalString
 
 class StringGeneratorTest {
 
@@ -53,5 +54,37 @@ class StringGeneratorTest {
             }
             if (chars.all { it.value.size > 0 }) break
         }
+    }
+}
+
+class AllStringGeneratorTest {
+
+    @Test(expected = IllegalArgumentException::class)
+    fun length0CauseIllegalArgumentException() {
+        AllStringGenerator(0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun negativeLengthCauseIllegalArgumentException() {
+        AllStringGenerator(-1)
+    }
+
+    @Test(timeout = 1000)
+    fun generatorGeneratesStringWithinTheLengthSpecified() {
+        val generator = AllStringGenerator(10)
+        (1..120).forEach {
+            val s = generator.generate()
+            println(s)
+            assert(s.length <= 10, { "[$s] is longer than 10[$it/120]" })
+            assert(s.length > 0)
+        }
+    }
+}
+
+class StringWrapperTest {
+
+    @Test fun theSizeOfNormalStringIs1() {
+        val ns = NormalString("あ")
+        assert(ns.size == 1)
     }
 }

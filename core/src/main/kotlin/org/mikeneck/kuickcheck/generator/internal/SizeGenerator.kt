@@ -13,20 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mikeneck.kuickcheck.generator
+package org.mikeneck.kuickcheck.generator.internal
 
 import org.mikeneck.kuickcheck.Generator
-import org.mikeneck.kuickcheck.generator.internal.SizeGenerator
-import java.math.BigInteger
 
-class IntGenerator(val min: Int, override val max: Int) : Generator<Int>, SizeGenerator {
-
-    init {
-        if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
-    }
-
-    override fun generate(): Int {
-        val generator = BigIntegerGenerator(BigInteger.valueOf(min.toLong()), BigInteger.valueOf(max.toLong()))
-        return generator.generate().toInt()
-    }
+internal interface SizeGenerator : Generator<Int> {
+    val max: Int
+    fun <U> of(f: (Int) -> U): List<U> = 1.rangeTo(this.generate()).map(f)
 }
+
+internal class OneSizedInt1Generator : SizeGenerator {
+    override fun generate(): Int = 1
+    override val max: Int = 1
+}
+
