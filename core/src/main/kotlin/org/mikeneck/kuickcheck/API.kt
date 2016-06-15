@@ -22,6 +22,7 @@ import org.mikeneck.kuickcheck.prediction.doubleParameterPrediction
 import org.mikeneck.kuickcheck.prediction.singleParameterPrediction
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
+import java.util.*
 import kotlin.system.exitProcess
 
 @Target(AnnotationTarget.PROPERTY)
@@ -129,3 +130,21 @@ fun string(size: Int): Generator<String> = AllStringGenerator(size)
 fun string(str: String): Generator<String> = StringGenerator(str)
 
 fun string(str: String, size: Int): Generator<String> = StringGenerator(str, size)
+
+val date: Generator<Date> = DateGenerator()
+
+fun date(min: Date, max: Date): Generator<Date> = DateGenerator(min, max)
+
+fun date(min: Long, max: Long): Generator<Date> = DateGenerator(min, max)
+
+fun date(min: Long, max: Date): Generator<Date> = DateGenerator(min, max)
+
+fun date(min: Date, max: Long): Generator<Date> = DateGenerator(min, max)
+
+val today: Generator<Date> = DateGenerator.today()
+
+val dayInThisMonth: Generator<Date> = DateGenerator.thisMonth()
+
+val dayInThisYear: DateGeneratorOfYear = DateGenerator.thisYear()
+
+fun dayInTheYear(year: Int): DateGeneratorOfYear = DateGenerator.ofYear(year)
