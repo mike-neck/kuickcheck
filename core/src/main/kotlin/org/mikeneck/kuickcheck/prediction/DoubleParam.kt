@@ -17,6 +17,7 @@ package org.mikeneck.kuickcheck.prediction
 
 import org.mikeneck.kuickcheck.Checker2
 import org.mikeneck.kuickcheck.Generator
+import org.mikeneck.kuickcheck.KuickCheck
 
 fun <T, U> doubleParameterPrediction(gen1: Generator<T>, gen2: Generator<U>): DoubleParameterPrediction<T, U> =
         DoubleArgumentPrediction(gen1, gen2)
@@ -27,7 +28,7 @@ interface DoubleParameterPrediction<T, U> {
 }
 
 class DoubleArgumentPrediction<T, U>
-(val gen1: Generator<T>, val gen2: Generator<U>, val repeatTime: Int = 100)
+(val gen1: Generator<T>, val gen2: Generator<U>, val repeatTime: Int = KuickCheck.DEFAULT_REPEAT)
 : DoubleParameterPrediction<T, U>{
 
     override fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U> {
@@ -45,7 +46,7 @@ class DoubleArgumentPrediction<T, U>
 }
 
 class DoubleArgumentFilteredPrediction<T, U>
-(val gen1: Generator<T>, val gen2: Generator<U>, val condition: (T, U) -> Boolean, val repeatTime: Int = 100)
+(val gen1: Generator<T>, val gen2: Generator<U>, val condition: (T, U) -> Boolean, val repeatTime: Int = KuickCheck.DEFAULT_REPEAT)
 : DoubleParameterPrediction<T, U> {
 
     override fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U> {

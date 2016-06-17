@@ -16,10 +16,7 @@
 package org.mikeneck.kuickcheck
 
 import org.mikeneck.kuickcheck.generator.*
-import org.mikeneck.kuickcheck.prediction.DoubleParameterPrediction
-import org.mikeneck.kuickcheck.prediction.SingleParameterPrediction
-import org.mikeneck.kuickcheck.prediction.doubleParameterPrediction
-import org.mikeneck.kuickcheck.prediction.singleParameterPrediction
+import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
 import java.util.*
@@ -50,6 +47,8 @@ interface Generator<out T> : () -> T
 
 object KuickCheck {
 
+    @JvmField val DEFAULT_REPEAT = 100
+
     @JvmStatic fun main(args: Array<String>) {
         if (args.contains("--debug")) ClassScanner.debug()
         val properties = ClassScanner.prepareForCheck()
@@ -67,6 +66,8 @@ fun <T> forAll(generator: Generator<T>): SingleParameterPrediction<T> = singlePa
 
 fun <T, U> forAll(gen1: Generator<T>, gen2: Generator<U>): DoubleParameterPrediction<T, U> =
         doubleParameterPrediction(gen1, gen2)
+
+fun <T> forAll(function: () -> T): SingleParameterPrediction<T> = functionalPrediction(function)
 
 val boolean: Generator<Boolean> = BooleanGenerator()
 
