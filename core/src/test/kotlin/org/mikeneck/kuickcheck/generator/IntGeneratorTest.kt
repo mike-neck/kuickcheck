@@ -27,14 +27,14 @@ class IntGeneratorTest {
     @Test
     fun maxEqualsToMin() {
         val generator = IntGenerator(1, 1)
-        1.rangeTo(100).forEach { assert(generator.generate() == 1) }
+        1.rangeTo(100).forEach { assert(generator.invoke() == 1) }
     }
 
     @Test
     fun smallRange() {
         val generator = IntGenerator(0, 20)
         1.rangeTo(120).forEach {
-            val random = generator.generate()
+            val random = generator.invoke()
             assert(0 <= random && random <= 20, {"random value [$random]"})
         }
     }
@@ -42,7 +42,7 @@ class IntGeneratorTest {
     @Test
     fun largeRange() {
         val generator = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
-        val list = 1.rangeTo(200).map { generator.generate() }.sorted()
+        val list = 1.rangeTo(200).map { generator.invoke() }.sorted()
         assert(Int.MIN_VALUE <= list.first())
         assert(list.last() <= Int.MAX_VALUE)
     }

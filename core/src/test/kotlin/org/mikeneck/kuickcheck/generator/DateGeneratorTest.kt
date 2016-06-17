@@ -35,7 +35,7 @@ class DateGeneratorTest {
     @Test fun minEqualsToMax() {
         val date = Date()
         val generator = DateGenerator(date, date)
-        assert(generator.generate() == date)
+        assert(generator.invoke() == date)
     }
 
     @Test fun generatorGeneratesTheDateBetweenMinAndMax() {
@@ -43,7 +43,7 @@ class DateGeneratorTest {
         val max = Date(1280000)
         val generator = DateGenerator(min, max)
         1.rangeTo(120).forEach {
-            val d = generator.generate()
+            val d = generator.invoke()
             assert(min <= d)
             assert(d <= max)
         }
@@ -55,7 +55,7 @@ class DateGeneratorTest {
         val date = fmt.format(now)
         val today = DateGenerator.today()
         1.rangeTo(120).forEach {
-            val g = today.generate()
+            val g = today.invoke()
             val f = fmt.format(g)
             assert(date == f, { "[$it]expected:$date - actual:$f" })
         }
@@ -67,7 +67,7 @@ class DateGeneratorTest {
         val month = fmt.format(now)
         val thisMonth = DateGenerator.thisMonth()
         1.rangeTo(120).forEach {
-            val g = thisMonth.generate()
+            val g = thisMonth.invoke()
             val f = fmt.format(g)
             assert(month == f, { "[$it]expected:$month - actual:$f" })
         }
@@ -123,7 +123,7 @@ class DateGeneratorOfMonthTest {
     fun generatorGeneratesTheSameMonth() {
         val generator = DateGenerator.ofMonth(2016, Month.JUNE)
         1.rangeTo(120).forEach {
-            val date = generator.generate()
+            val date = generator.invoke()
             @Suppress("DEPRECATION")
             val month = date.month
             assert(month == 5)
@@ -135,7 +135,7 @@ class DateGeneratorOfMonthTest {
         val generator = DateGenerator.ofMonth(2016, Month.JUNE)
                 .from(11).through(19)
         1.rangeTo(120).forEach {
-            val date = generator.generate()
+            val date = generator.invoke()
             @Suppress("DEPRECATION")
             val day = date.date
             assert(11 <= day, { "$date is after 11." })
@@ -148,8 +148,8 @@ class DateGeneratorOfMonthTest {
         val thisMonth = DateGenerator.thisMonth()
         val thisYear = DateGenerator.thisYear()
         1.rangeTo(120).forEach {
-            val m = thisMonth.generate()
-            val y = thisYear.generate()
+            val m = thisMonth.invoke()
+            val y = thisYear.invoke()
             @Suppress("DEPRECATION")
             assert(m.year == y.year)
         }

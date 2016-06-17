@@ -38,7 +38,7 @@ class StringGeneratorTest {
     @Test fun length1GeneratorGeneratesStringWithSize1() {
         val g = StringGenerator("2", 1)
         (1..120).forEach {
-            assert(g.generate().length == 1)
+            assert(g.invoke().length == 1)
         }
     }
 
@@ -48,7 +48,7 @@ class StringGeneratorTest {
         val chars = str.toCharArray().map { Pair(it, mutableListOf<Char>()) }.toMap()
         val generator = StringGenerator(str, 20)
         while (true) {
-            val s = generator.generate()
+            val s = generator.invoke()
             s.toCharArray().forEach {
                 chars[it]?.add(it)
             }
@@ -73,7 +73,7 @@ class AllStringGeneratorTest {
     fun generatorGeneratesStringWithinTheLengthSpecified() {
         val generator = AllStringGenerator(10)
         (1..120).forEach {
-            val s = generator.generate()
+            val s = generator.invoke()
             println(s)
             assert(s.length <= 10, { "[$s] is longer than 10[$it/120]" })
             assert(s.length > 0)

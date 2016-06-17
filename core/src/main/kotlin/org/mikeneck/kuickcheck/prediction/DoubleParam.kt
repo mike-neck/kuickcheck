@@ -32,7 +32,7 @@ class DoubleArgumentPrediction<T, U>
 
     override fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U> {
         return object: Checker2<T, U> {
-            override fun testData(): Pair<T, U> = Pair(gen1.generate(), gen2.generate())
+            override fun testData(): Pair<T, U> = Pair(gen1.invoke(), gen2.invoke())
             override fun consume(p: Pair<T, U>): Boolean {
                 return predicate.invoke(p.first, p.second)
             }
@@ -52,7 +52,7 @@ class DoubleArgumentFilteredPrediction<T, U>
         return object: Checker2<T, U> {
             override fun testData(): Pair<T, U> {
                 while (true) {
-                    val p = Pair(gen1.generate(), gen2.generate())
+                    val p = Pair(gen1.invoke(), gen2.invoke())
                     if (condition.invoke(p.first, p.second)) return p
                 }
             }

@@ -25,7 +25,7 @@ class CharGeneratorTest {
         val chars = charArrayOf('a', 'A', '0')
         val generator = CharGenerator(chars)
         (1..120).forEach {
-            assert(generator.generate() in chars)
+            assert(generator.invoke() in chars)
         }
     }
 
@@ -33,7 +33,7 @@ class CharGeneratorTest {
         val chars = charArrayOf('あ', 'プ', '堀')
         val generator = charGenerator('あ', 'プ', '堀')
         (1..120).forEach {
-            assert(generator.generate() in chars)
+            assert(generator.invoke() in chars)
         }
     }
 
@@ -61,7 +61,7 @@ class CharGeneratorTest {
         val generator = CharGenerator('0', '9')
         val chars = "0123456789".toCharArray()
         (1..120).forEach {
-            assert(generator.generate() in chars)
+            assert(generator.invoke() in chars)
         }
     }
 
@@ -70,7 +70,7 @@ class CharGeneratorTest {
         val generator = CharGenerator(str)
         val chars = str.toCharArray()
         (1..120).forEach {
-            assert(generator.generate() in chars)
+            assert(generator.invoke() in chars)
         }
     }
 }

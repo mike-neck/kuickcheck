@@ -16,7 +16,6 @@
 package org.mikeneck.kuickcheck.prediction
 
 import org.mikeneck.kuickcheck.Checker
-import org.mikeneck.kuickcheck.Checker2
 import org.mikeneck.kuickcheck.Generator
 
 interface SingleParameterPrediction<T> {
@@ -34,7 +33,7 @@ class SingleParamPrediction<T>
     override fun satisfy(predicate: (T) -> Boolean): Checker<T> {
         return object: Checker<T> {
             override val repeat: Int = repeatTime
-            override fun testData(): T = generator.generate()
+            override fun testData(): T = generator.invoke()
             override fun consume(p: T): Boolean = predicate.invoke(p)
         }
     }
@@ -51,7 +50,7 @@ class SingleFilteredParamPrediction<T>
         return object: Checker<T> {
             override fun testData(): T {
                 while (true) {
-                    val t: T = generator.generate()
+                    val t: T = generator.invoke()
                     if (condition.invoke(t)) return t
                 }
             }

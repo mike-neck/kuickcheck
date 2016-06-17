@@ -33,8 +33,8 @@ internal class CharGenerator(val chars: CharArray) : Generator<Char> {
 
     constructor(entry: String) : this(entry.toCharArray().sortedArray())
 
-    override fun generate(): Char {
-        val index = IntGenerator(0, chars.size - 1).generate()
+    override fun invoke(): Char {
+        val index = IntGenerator(0, chars.size - 1).invoke()
         return chars[index]
     }
 

@@ -24,8 +24,8 @@ class LongGenerator(val min: Long, val max: Long): Generator<Long> {
         if (min > max) throw IllegalArgumentException("Max should be larger than min. [max: $max min: $min]")
     }
 
-    override fun generate(): Long {
+    override fun invoke(): Long {
         val generator = BigIntegerGenerator(BigInteger.valueOf(min), BigInteger.valueOf(max))
-        return generator.generate().toLong()
+        return generator.invoke().toLong()
     }
 }

@@ -19,11 +19,11 @@ import org.mikeneck.kuickcheck.Generator
 
 internal interface SizeGenerator : Generator<Int> {
     val max: Int
-    fun <U> of(f: (Int) -> U): List<U> = 1.rangeTo(this.generate()).map(f)
+    fun <U> of(f: (Int) -> U): List<U> = 1.rangeTo(this.invoke()).map(f)
 }
 
 internal class OneSizedInt1Generator : SizeGenerator {
-    override fun generate(): Int = 1
+    override fun invoke(): Int = 1
     override val max: Int = 1
 }
 

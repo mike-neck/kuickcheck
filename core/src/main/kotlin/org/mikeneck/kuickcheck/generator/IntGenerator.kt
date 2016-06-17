@@ -25,8 +25,8 @@ class IntGenerator(val min: Int, override val max: Int) : Generator<Int>, SizeGe
         if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
     }
 
-    override fun generate(): Int {
+    override fun invoke(): Int {
         val generator = BigIntegerGenerator(BigInteger.valueOf(min.toLong()), BigInteger.valueOf(max.toLong()))
-        return generator.generate().toInt()
+        return generator.invoke().toInt()
     }
 }

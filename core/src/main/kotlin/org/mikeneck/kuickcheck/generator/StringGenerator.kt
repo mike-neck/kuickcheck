@@ -30,8 +30,8 @@ internal class StringGenerator(chars: String, length: Int = 50) : Generator<Stri
         else RandomString(chars)
     }
 
-    override fun generate(): String {
-        return upto(size) { string.generate() }.joinToString("")
+    override fun invoke(): String {
+        return upto(size) { string.invoke() }.joinToString("")
     }
 }
 
@@ -40,7 +40,7 @@ else if (1 < length) IntGenerator(2, length)
 else OneSizedInt1Generator()
 
 private fun <T : SizedWrapper<U>, U> upto(size: SizeGenerator, f: () -> T): List<T> {
-    val s = size.generate()
+    val s = size.invoke()
     val l = mutableListOf<T>()
     var c = 0
     while (c < s) {
@@ -86,8 +86,8 @@ internal class RandomString(chars: String) : Generator<SizedWrapper<String>> {
         indices = if (entry.size == 1) OneSizedInt1Generator() else IntGenerator(1, entry.size)
     }
 
-    override fun generate(): SizedWrapper<String> {
-        val codePoint = entry[indices.generate() - 1]
+    override fun invoke(): SizedWrapper<String> {
+        val codePoint = entry[indices.invoke() - 1]
         return codePoint.string()
     }
 }
@@ -99,8 +99,8 @@ internal class AllStringGenerator(length: Int = 50) : Generator<String> {
             else if (length == 1) OneSizedInt1Generator()
             else IntGenerator(1, length)
 
-    override fun generate(): String {
-        return upto(size) { OneSizedAllString.generate() }.joinToString("")
+    override fun invoke(): String {
+        return upto(size) { OneSizedAllString.invoke() }.joinToString("")
     }
 }
 
@@ -114,8 +114,8 @@ internal object OneSizedAllString : Generator<SizedWrapper<String>> {
 
     val lowSurrogates: Generator<Int> = Char.MIN_LOW_SURROGATE.intGeneratorTo(Char.MAX_LOW_SURROGATE)
 
-    override fun generate(): SizedWrapper<String> {
-        val c = allChars.generate().toChar()
+    override fun invoke(): SizedWrapper<String> {
+        val c = allChars.invoke().toChar()
         return if (Character.isSurrogate(c)) createSurrogateString(c)
         else NormalString(c.toString())
     }
@@ -127,7 +127,7 @@ internal object OneSizedAllString : Generator<SizedWrapper<String>> {
 
     fun stringWithHighSurrogate(high: Char): SurrogateString {
         while (true) {
-            val l = lowSurrogates.generate().toChar()
+            val l = lowSurrogates.invoke().toChar()
             if (Character.isSurrogatePair(high, l)) {
                 val cp = Character.toCodePoint(high, l)
                 return SurrogateString(String(Character.toChars(cp)))
@@ -137,7 +137,7 @@ internal object OneSizedAllString : Generator<SizedWrapper<String>> {
 
     fun stringWithLowSurrogate(low: Char): SurrogateString {
         while (true) {
-            val h = highSurrogates.generate().toChar()
+            val h = highSurrogates.invoke().toChar()
             if (Character.isSurrogatePair(h, low)) {
                 val cp = Character.toCodePoint(h, low)
                 return SurrogateString(String(Character.toChars(cp)))

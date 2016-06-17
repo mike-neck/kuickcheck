@@ -36,8 +36,8 @@ internal class DateGenerator(@Suppress("UNUSED_PARAMETER") val min: Date,
 
     private val generator: Generator<Long> = LongGenerator(min.time, max.time)
 
-    override fun generate(): Date {
-        val time = generator.generate()
+    override fun invoke(): Date {
+        val time = generator.invoke()
         return Date(time)
     }
 
@@ -139,8 +139,8 @@ internal class MonthSpecifiedDateGenerator(val year: Int, val month: Month, val 
         return MonthSpecifiedDateGenerator(year, month, from, day)
     }
 
-    override fun generate(): Date {
-        return generator.generate()
+    override fun invoke(): Date {
+        return generator.invoke()
     }
 }
 
@@ -244,5 +244,5 @@ internal class YearSpecifiedDateGenerator(val year: Int) : DateGeneratorOfYear {
     override val DEC: DateGeneratorOfMonth
         get() = month(Month.DECEMBER)
 
-    override fun generate(): Date = generator.generate()
+    override fun invoke(): Date = generator.invoke()
 }

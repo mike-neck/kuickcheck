@@ -22,5 +22,5 @@ internal class BooleanGenerator(val always: Boolean?) : Generator<Boolean> {
 
     constructor() : this(null)
 
-    override fun generate(): Boolean = always ?: RandomSource.random.nextBoolean()
+    override fun invoke(): Boolean = always ?: RandomSource.random.nextBoolean()
 }

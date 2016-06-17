@@ -25,7 +25,7 @@ class BigIntegerGenerator(val min: BigInteger, val max: BigInteger): Generator<B
         if (max < min) throw IllegalArgumentException("Max should be larger than min. [max: $max, min: $min]")
     }
 
-    override fun generate(): BigInteger {
+    override fun invoke(): BigInteger {
         val range = max - min + BigInteger.ONE
         while (true) {
             val generated = BigInteger(range.bitLength(), RandomSource.random)

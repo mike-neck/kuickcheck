@@ -22,14 +22,14 @@ class BooleanGeneratorTest {
     @Test fun alwaysTrueBooleanGeneratorReturnsTrue() {
         val generator = BooleanGenerator(true)
         (1..100).forEach {
-            assert(generator.generate() == true)
+            assert(generator.invoke() == true)
         }
     }
 
     @Test fun alwaysFalseBooleanGeneratorReturnsFalse() {
         val generator = BooleanGenerator(false)
         (1..100).forEach {
-            assert(generator.generate() == false)
+            assert(generator.invoke() == false)
         }
     }
 
@@ -38,7 +38,7 @@ class BooleanGeneratorTest {
         var t = true
         var f = true
         while (t || f) {
-            when (generator.generate()) {
+            when (generator.invoke()) {
                 true -> t = false
                 false -> f = false
             }

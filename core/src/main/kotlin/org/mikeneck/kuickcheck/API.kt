@@ -46,9 +46,7 @@ interface Checker<T> {
 
 interface Checker2<F, S>: Checker<Pair<F, S>>
 
-interface Generator<out T> {
-    fun generate(): T
-}
+interface Generator<out T> : () -> T
 
 object KuickCheck {
 
