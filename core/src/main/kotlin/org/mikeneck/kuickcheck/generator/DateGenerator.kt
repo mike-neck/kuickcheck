@@ -68,7 +68,7 @@ internal class DateGenerator(@Suppress("UNUSED_PARAMETER") val min: Date,
         @Suppress("DEPRECATION")
         internal fun lastDay(today: Date): Int {
             val m = today.month + 1
-            val y = today.year
+            val y = today.year + 1900
             return lastDay(y, m)
         }
 

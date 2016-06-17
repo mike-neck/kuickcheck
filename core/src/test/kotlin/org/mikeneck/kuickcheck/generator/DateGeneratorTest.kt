@@ -16,6 +16,10 @@
 package org.mikeneck.kuickcheck.generator
 
 import org.junit.Test
+import org.junit.experimental.theories.DataPoints
+import org.junit.experimental.theories.Theories
+import org.junit.experimental.theories.Theory
+import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,6 +71,25 @@ class DateGeneratorTest {
             val f = fmt.format(g)
             assert(month == f, { "[$it]expected:$month - actual:$f" })
         }
+    }
+}
+
+@RunWith(Theories::class)
+class LastDayTest {
+
+    companion object {
+        @DataPoints @JvmField val testData = listOf(
+                Pair("2000/02/01", 29),
+                Pair("1900/02/01", 28),
+                Pair("2016/02/01", 29)
+        )
+    }
+
+    @Theory fun test(data: Pair<String, Int>) {
+        val fmt = SimpleDateFormat("yyyy/MM/dd")
+        val date = fmt.parse(data.first)
+        val actual = DateGenerator.lastDay(date)
+        assert(actual == data.second)
     }
 }
 
