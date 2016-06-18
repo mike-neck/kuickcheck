@@ -22,8 +22,17 @@ internal interface SizeGenerator : Generator<Int> {
     fun <U> of(f: (Int) -> U): List<U> = 1.rangeTo(this.invoke()).map(f)
 }
 
-internal class OneSizedInt1Generator : SizeGenerator {
+internal class Size1SizeGenerator : SizeGenerator {
     override fun invoke(): Int = 1
     override val max: Int = 1
 }
 
+internal class FixedSizeGenerator(val size: Int) : SizeGenerator {
+    override val max: Int = 1
+    override fun invoke(): Int = size
+}
+
+internal class EmptySizeGenerator : SizeGenerator {
+    override fun invoke(): Int = 0
+    override val max: Int = 0
+}

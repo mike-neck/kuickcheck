@@ -37,7 +37,7 @@ internal class StringGenerator(chars: String, length: Int = 50) : Generator<Stri
 
 private fun intSizeGenerator(length: Int) = if (length <= 0) throw IllegalArgumentException("Length should be larger than 0.[input: $length]")
 else if (1 < length) IntGenerator(2, length)
-else OneSizedInt1Generator()
+else Size1SizeGenerator()
 
 private fun <T : SizedWrapper<U>, U> upto(size: SizeGenerator, f: () -> T): List<T> {
     val s = size.invoke()
@@ -83,7 +83,7 @@ internal class RandomString(chars: String) : Generator<SizedWrapper<String>> {
             i++
         }
         entry = set.toList()
-        indices = if (entry.size == 1) OneSizedInt1Generator() else IntGenerator(1, entry.size)
+        indices = if (entry.size == 1) Size1SizeGenerator() else IntGenerator(1, entry.size)
     }
 
     override fun invoke(): SizedWrapper<String> {
@@ -96,7 +96,7 @@ internal class AllStringGenerator(length: Int = 50) : Generator<String> {
 
     val size: SizeGenerator =
             if (length <= 0) throw IllegalArgumentException("Length should be larger than 0.[input: $length]")
-            else if (length == 1) OneSizedInt1Generator()
+            else if (length == 1) Size1SizeGenerator()
             else IntGenerator(1, length)
 
     override fun invoke(): String {
