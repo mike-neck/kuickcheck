@@ -15,3 +15,14 @@
  */
 package org.mikeneck.kuickcheck.generator
 
+import org.mikeneck.kuickcheck.Generator
+import org.mikeneck.kuickcheck.random.RandomSource
+
+internal class DoubleGenerator(val min: Double = -Double.MAX_VALUE, val max: Double = Double.MAX_VALUE) : Generator<Double> {
+
+    init {
+        if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
+    }
+
+    override fun invoke(): Double = RandomSource.nextDouble(min, max)
+}

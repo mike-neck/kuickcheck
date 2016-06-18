@@ -134,6 +134,18 @@ val negativeFloatTo0: Generator<Float> = FloatGenerator(max = 0f)
 
 fun float(min: Float, max: Float): Generator<Float> = FloatGenerator(min, max)
 
+val double: Generator<Double> = DoubleGenerator()
+
+val positiveDouble: Generator<Double> = DoubleGenerator(min = Double.MIN_VALUE)
+
+val positiveDoubleFrom0: Generator<Double> = DoubleGenerator(min = 0.0)
+
+val negativeDouble: Generator<Double> = DoubleGenerator(max = -Double.MIN_VALUE)
+
+val negativeDoubleTo0: Generator<Double> = DoubleGenerator(max = 0.0)
+
+fun double(min: Double, max: Double): Generator<Double> = DoubleGenerator(min, max)
+
 val string: Generator<String> = AllStringGenerator()
 
 fun string(size: Int): Generator<String> = AllStringGenerator(size)

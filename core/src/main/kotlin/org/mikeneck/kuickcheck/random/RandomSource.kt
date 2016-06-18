@@ -32,4 +32,16 @@ object RandomSource {
     }
 
     private fun nextFloat(): Float = random.nextFloat()
+
+    fun nextDouble(min: Double, max: Double): Double {
+        val range = max - min
+        return if (range == 0.toDouble()) min else min + range * nextDouble()
+    }
+
+    fun nextReverseDouble(min: Double, max: Double): Double {
+        val range = min - max
+        return if (range == 0.toDouble()) max else max + range * nextDouble()
+    }
+
+    private fun nextDouble(): Double = random.nextDouble()
 }
