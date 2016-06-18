@@ -17,6 +17,7 @@ package org.mikeneck.kuickcheck
 
 import org.mikeneck.kuickcheck.generator.*
 import org.mikeneck.kuickcheck.generator.collection.ListGenerator
+import org.mikeneck.kuickcheck.generator.collection.MutableListGenerator
 import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
@@ -181,3 +182,6 @@ val dayInThisYear: DateGeneratorOfYear = DateGenerator.thisYear()
 fun dayInTheYear(year: Int): DateGeneratorOfYear = DateGenerator.ofYear(year)
 
 fun <T> list(type: Generator<T>): CollectionGenerator<List<T>> = ListGenerator(type)
+
+fun <T> mutableList(type: Generator<T>): CollectionGenerator<MutableList<T>> =
+        MutableListGenerator(type)
