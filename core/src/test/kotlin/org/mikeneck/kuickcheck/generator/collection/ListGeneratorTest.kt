@@ -68,7 +68,7 @@ class ListGeneratorTest {
     }
 
     @Test fun fixedListGeneratorGeneratesTheSameSizeList() {
-        val generator = ListGenerator(int, fixedSize = true)
+        val generator = ListGenerator(int, sizeFixed = true)
         (1..120).forEach {
             assert(generator().size == 20)
         }

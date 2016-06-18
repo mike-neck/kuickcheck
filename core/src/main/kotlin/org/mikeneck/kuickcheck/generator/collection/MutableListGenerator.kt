@@ -22,13 +22,13 @@ import org.mikeneck.kuickcheck.generator.internal.SizeGenerator
 internal class MutableListGenerator<T>(
         val elementGenerator: Generator<T>,
         override val size: Int = 20,
-        override val fixedSize: Boolean = false) : ContainerGenerator<MutableList<T>> {
+        override val sizeFixed: Boolean = false) : ContainerGenerator<MutableList<T>> {
 
-    val sizeGenerator: SizeGenerator = if (fixedSize) FixedSizeGenerator(size)
+    val sizeGenerator: SizeGenerator = if (sizeFixed) FixedSizeGenerator(size)
     else ContainerGenerator.sizeGenerator(size)
 
     override fun overrideSize(newSize: Int): Generator<MutableList<T>> =
-            MutableListGenerator(elementGenerator, newSize, fixedSize)
+            MutableListGenerator(elementGenerator, newSize, sizeFixed)
 
     override fun fix(newSize: Int): Generator<MutableList<T>> =
             MutableListGenerator(elementGenerator, newSize, true)

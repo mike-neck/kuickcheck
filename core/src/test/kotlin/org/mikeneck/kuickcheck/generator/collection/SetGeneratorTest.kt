@@ -95,14 +95,14 @@ class SetGeneratorTest {
     }
 
     @Test fun alwaysTrueGenerator() {
-        val generator = SetGenerator(elementGenerator = alwaysTrue, fixedSize = true)
+        val generator = SetGenerator(elementGenerator = alwaysTrue, sizeFixed = true)
         repeat(10) {
             assert(generator().size == 1)
         }
     }
 
     @Test fun booleanGenerator() {
-        val generator = SetGenerator(elementGenerator = boolean, fixedSize = true)
+        val generator = SetGenerator(elementGenerator = boolean, sizeFixed = true)
         repeat(10) {
             assert(generator().size == 2)
         }

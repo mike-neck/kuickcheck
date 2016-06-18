@@ -21,12 +21,12 @@ import org.mikeneck.kuickcheck.generator.internal.SizeGenerator
 internal class SetGenerator<out T>(
         val elementGenerator: Generator<T>,
         override val size: Int = 20,
-        override val fixedSize: Boolean = false) : ContainerGenerator<Set<T>> {
+        override val sizeFixed: Boolean = false) : ContainerGenerator<Set<T>> {
 
-    val sizeGenerator: SizeGenerator = ContainerGenerator.sizeGenerator(size, fixedSize)
+    val sizeGenerator: SizeGenerator = ContainerGenerator.sizeGenerator(size, sizeFixed)
 
     override fun overrideSize(newSize: Int): Generator<Set<T>> =
-            SetGenerator(elementGenerator, newSize, fixedSize)
+            SetGenerator(elementGenerator, newSize, sizeFixed)
 
     override fun fix(newSize: Int): Generator<Set<T>> =
             SetGenerator(elementGenerator, newSize, true)

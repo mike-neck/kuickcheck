@@ -50,7 +50,7 @@ interface Generator<out T> : () -> T
 
 interface CollectionGenerator<out T> : Generator<T> {
     val size: Int
-    val fixedSize: Boolean
+    val sizeFixed: Boolean
     fun size(newSize: Int): Generator<T>
     fun fixedSize(newSize: Int): Generator<T>
 }
