@@ -51,5 +51,7 @@ internal interface ContainerGenerator<out T> : CollectionGenerator<T> {
 
         fun sizeGenerator(size: Int, sizeFixed: Boolean): SizeGenerator =
                 if (sizeFixed) FixedSizeGenerator(size) else sizeGenerator(size)
+
+        val THRESHOLD = 10
     }
 }

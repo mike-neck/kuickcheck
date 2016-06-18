@@ -37,7 +37,7 @@ internal class MapGenerator<K, out V>(
         val map = mutableMapOf<K, V>()
         val size = sizeGenerator()
         var t = 0
-        while (map.size < size && t < THRESHOLD) {
+        while (map.size < size && t < ContainerGenerator.THRESHOLD) {
             val k = keyGenerator()
             if (map.containsKey(k)) {
                 t += 1
@@ -47,9 +47,5 @@ internal class MapGenerator<K, out V>(
             }
         }
         return LinkedHashMap(map)
-    }
-
-    companion object {
-        val THRESHOLD = 10
     }
 }

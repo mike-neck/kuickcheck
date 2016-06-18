@@ -36,16 +36,12 @@ internal class SetGenerator<out T>(
         val set = mutableSetOf<T>()
         var cs = 0
         var t = 0
-        while (set.size < size && t < THRESHOLD) {
+        while (set.size < size && t < ContainerGenerator.THRESHOLD) {
             set.add(elementGenerator())
             val s = set.size
             t = if (cs == s) t + 1 else 0
             cs = s
         }
         return set.toSet()
-    }
-
-    companion object {
-        val THRESHOLD = 10
     }
 }
