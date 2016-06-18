@@ -30,6 +30,20 @@ class IntGeneratorTest {
         1.rangeTo(100).forEach { assert(generator.invoke() == 1) }
     }
 
+    @Test(timeout = 1000)
+    fun generatorGeneratesTheValuesInRange() {
+        val map: Map<Int, MutableList<Int>> =
+                (1..10).map { Pair(it, mutableListOf<Int>()) }.toMap()
+        val generator = IntGenerator(1, 10)
+        while (true) {
+            val int = generator.invoke()
+            assert(int > 0)
+            assert(int < 11)
+            map[int]?.add(int)
+            if (map.all { it.value.size > 0 }) break
+        }
+    }
+
     @Test
     fun smallRange() {
         val generator = IntGenerator(0, 20)
