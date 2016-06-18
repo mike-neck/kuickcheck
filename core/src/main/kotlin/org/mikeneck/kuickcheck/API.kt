@@ -18,6 +18,7 @@ package org.mikeneck.kuickcheck
 import org.mikeneck.kuickcheck.generator.*
 import org.mikeneck.kuickcheck.generator.collection.ListGenerator
 import org.mikeneck.kuickcheck.generator.collection.MutableListGenerator
+import org.mikeneck.kuickcheck.generator.collection.SetGenerator
 import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
@@ -185,3 +186,5 @@ fun <T> list(type: Generator<T>): CollectionGenerator<List<T>> = ListGenerator(t
 
 fun <T> mutableList(type: Generator<T>): CollectionGenerator<MutableList<T>> =
         MutableListGenerator(type)
+
+fun <T> set(type: Generator<T>): CollectionGenerator<Set<T>> = SetGenerator(type)

@@ -19,6 +19,7 @@ import org.mikeneck.kuickcheck.CollectionGenerator
 import org.mikeneck.kuickcheck.Generator
 import org.mikeneck.kuickcheck.generator.IntGenerator
 import org.mikeneck.kuickcheck.generator.internal.EmptySizeGenerator
+import org.mikeneck.kuickcheck.generator.internal.FixedSizeGenerator
 import org.mikeneck.kuickcheck.generator.internal.SizeGenerator
 
 internal interface ContainerGenerator<out T> : CollectionGenerator<T> {
@@ -47,5 +48,8 @@ internal interface ContainerGenerator<out T> : CollectionGenerator<T> {
                 else -> IntGenerator(0, size)
             }
         }
+
+        fun sizeGenerator(size: Int, fixedSize: Boolean): SizeGenerator =
+                if (fixedSize) FixedSizeGenerator(size) else sizeGenerator(size)
     }
 }
