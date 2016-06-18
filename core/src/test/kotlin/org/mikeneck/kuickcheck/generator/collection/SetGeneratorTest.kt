@@ -70,28 +70,16 @@ class SetGeneratorTest {
 
     // generator generates the same element 9 times then another element -> specified size
     @Test fun repeat9Times() {
-        val generator = SetGenerator(intGenerator(10), 15, true)
+        val generator = SetGenerator(intGenerator(9), 15, true)
         val size = generator().size
         assert(size == 15, { "$size" })
     }
 
     // generator generates the same element 10 times -> size will be small
     @Test fun repeat10Times() {
-        val generator = SetGenerator(intGenerator(11), 15, true)
+        val generator = SetGenerator(intGenerator(10), 15, true)
         val size = generator().size
         assert(size < 15, { "$size" })
-    }
-
-    fun intGenerator(repeat: Int): Generator<Int> = object : Generator<Int> {
-
-        val itor: Iterator<Int>
-
-        init {
-            val list = listOf(1, 2, 3) + 1.rangeTo(repeat).map { 4 } + (5..50)
-            this.itor = list.iterator()
-        }
-
-        override fun invoke(): Int = itor.next()
     }
 
     @Test fun alwaysTrueGenerator() {
@@ -113,5 +101,96 @@ class SetGeneratorTest {
         repeat(10) {
             assert(generator().size < generator.size)
         }
+    }
+}
+
+fun intGenerator(repeat: Int): Generator<Int> = object : Generator<Int> {
+
+    val itor: Iterator<Int>
+
+    init {
+        val list = listOf(1, 2, 3, 4) + 1.rangeTo(repeat).map { 4 } + (5..50)
+        this.itor = list.iterator()
+    }
+
+    override fun invoke(): Int = itor.next()
+}
+
+class MutableSetGeneratorTest {
+
+    // set size <= max
+    @Test fun generatedSetSizeIsSmallerThanOrEqualToMax() {
+        val generator = MutableSetGenerator(int, 35)
+        repeat(120) {
+            assert(generator().size <= 35)
+        }
+    }
+
+    // set size >= 0
+    @Test(timeout = 1000) fun generatorSometimesGeneratesEmptySet() {
+        val generator = MutableSetGenerator(int, 10)
+        while (true) {
+            if (generator().size == 0) break
+        }
+    }
+
+    // set size(init 0) == 0
+    @Test fun generatorInitializedWithSize0GeneratesEmptySet() {
+        val generator = MutableSetGenerator(int, 0)
+        repeat(120) {
+            assert(generator().size == 0)
+        }
+    }
+
+    // fixed size -> same size
+    @Test fun fixedSizedGeneratorGeneratesTheSameSizeSet() {
+        val generator = MutableSetGenerator(int, 43, true)
+        repeat(120) {
+            assert(generator().size == 43)
+        }
+    }
+
+    // change size
+    @Test fun changeSize() {
+        val generator = MutableSetGenerator(int, 33).size(10)
+        repeat(120) {
+            assert(generator().size in (0..10))
+        }
+    }
+
+    // fix size
+    @Test fun fixSize() {
+        val generator = MutableSetGenerator(int, 20).fixedSize(10)
+        repeat(120) {
+            assert(generator().size == 10)
+        }
+    }
+
+    // generator generates the same element 9 times then another element -> specified size
+    @Test fun repeat9Times() {
+        val generator = MutableSetGenerator(intGenerator(9), 15, true)
+        assert(generator().size == 15)
+    }
+
+    // generator generates the same element 10 times -> size will be small
+    @Test fun repeat10Times() {
+        val generator = MutableSetGenerator(intGenerator(10), 15, true)
+        val size = generator().size
+        assert(size < 15, { "$size" })
+    }
+
+    @Test fun alwaysFalseGenerator() {
+        val generator = MutableSetGenerator(elementGenerator = alwaysFalse, sizeFixed = true)
+        repeat(120) {
+            assert(generator().size == 1)
+        }
+    }
+
+    @Test fun generatedSetCanModified() {
+        val generator = MutableSetGenerator(elementGenerator = char("abcdefghij"), sizeFixed = true)
+        val set = generator()
+        val size = set.size
+        set.add('u')
+        assert(set.size == size + 1)
     }
 }
