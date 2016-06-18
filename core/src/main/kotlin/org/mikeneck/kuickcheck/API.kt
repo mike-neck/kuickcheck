@@ -16,10 +16,7 @@
 package org.mikeneck.kuickcheck
 
 import org.mikeneck.kuickcheck.generator.*
-import org.mikeneck.kuickcheck.generator.collection.ListGenerator
-import org.mikeneck.kuickcheck.generator.collection.MutableListGenerator
-import org.mikeneck.kuickcheck.generator.collection.MutableSetGenerator
-import org.mikeneck.kuickcheck.generator.collection.SetGenerator
+import org.mikeneck.kuickcheck.generator.collection.*
 import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
@@ -192,3 +189,6 @@ fun <T> set(type: Generator<T>): CollectionGenerator<Set<T>> = SetGenerator(type
 
 fun <T> mutableSet(type: Generator<T>): CollectionGenerator<Set<T>> =
         MutableSetGenerator(type)
+
+fun <K, V> map(key: Generator<K>, value: Generator<V>): CollectionGenerator<Map<K, V>> =
+        MapGenerator(key, value)
