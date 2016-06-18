@@ -27,7 +27,7 @@ import org.mikeneck.kuickcheck.random.RandomSource
  * @property min the minimum value(inclusive) of the generator. `Float.MIN_VALUE` is default.
  * @property max the maximum value(exclusive) of the generator. `Float.MAX_VALUE` is default.
  */
-class FloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
+internal class FloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
 
     init {
         if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
@@ -47,7 +47,7 @@ class FloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.M
  * @property min the minimum value(exclusive) of the generator. `Float.MIN_VALUE` is default.
  * @property max the maximum value(inclusive) of the generator. `Float.MAX_VALUE` is default.
  */
-class ToggledFloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
+internal class ToggledFloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
 
     init {
         if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
