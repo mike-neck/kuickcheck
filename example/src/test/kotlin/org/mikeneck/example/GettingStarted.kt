@@ -32,4 +32,8 @@ object GettingStarted {
     @Property
     val `positiveInt x negativeInt becomes negative` =
             forAll(positiveInt, negativeInt).satisfy { l, r -> l * r < 0 }
+
+    @Property
+    val twiceReversedListEqualsToOriginal =
+            forAll (list(int)).satisfy { it.reversed().reversed() == it }
 }
