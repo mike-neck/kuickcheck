@@ -20,4 +20,16 @@ import java.util.*
 object RandomSource {
 
     val random: Random = Random()
+
+    fun nextFloat(min: Float, max: Float): Float {
+        val range = max - min
+        return if (range == 0.toFloat()) min else min + range * nextFloat()
+    }
+
+    fun nextReverseFloat(min: Float, max: Float): Float {
+        val range = min - max
+        return if (range == 0.toFloat()) max else max + range * nextFloat()
+    }
+
+    private fun nextFloat(): Float = random.nextFloat()
 }

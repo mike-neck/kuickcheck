@@ -15,10 +15,7 @@
  */
 package org.mikeneck.example
 
-import org.mikeneck.kuickcheck.Property
-import org.mikeneck.kuickcheck.forAll
-import org.mikeneck.kuickcheck.int
-import org.mikeneck.kuickcheck.string
+import org.mikeneck.kuickcheck.*
 
 object CustomGenerator {
 
@@ -34,8 +31,16 @@ object CustomGenerator {
 
     @Property
     val personOver20IsNotChild = forAll(personOver20).satisfy { !it.isChild() }
+
+    fun person(n: Generator<String>, a: Generator<Int>, h: Generator<Float>): () -> Person =
+            { Person(n(), a(), h()) }
+
+    @Property
+    val personUnder20WithHeightSmallerThan150PaysChildFee =
+            forAll(person(string(20), int(0, 19), float(60f, 150f))).satisfy { it.childFee() }
 }
 
-class Person(val name: String, val age: Int) {
+data class Person(val name: String, val age: Int, val height: Float = 165.0f) {
     fun isChild(): Boolean = age < 20
+    fun childFee(): Boolean = isChild() && height < 150
 }
