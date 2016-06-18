@@ -16,8 +16,7 @@
 package org.mikeneck.kuickcheck.generator.collection
 
 import org.junit.Test
-import org.mikeneck.kuickcheck.Generator
-import org.mikeneck.kuickcheck.int
+import org.mikeneck.kuickcheck.*
 
 class SetGeneratorTest {
 
@@ -93,5 +92,26 @@ class SetGeneratorTest {
         }
 
         override fun invoke(): Int = itor.next()
+    }
+
+    @Test fun alwaysTrueGenerator() {
+        val generator = SetGenerator(elementGenerator = alwaysTrue, fixedSize = true)
+        repeat(10) {
+            assert(generator().size == 1)
+        }
+    }
+
+    @Test fun booleanGenerator() {
+        val generator = SetGenerator(elementGenerator = boolean, fixedSize = true)
+        repeat(10) {
+            assert(generator().size == 2)
+        }
+    }
+
+    @Test fun charGeneratorWithRangeNarrowerThanSetGenerator() {
+        val generator = SetGenerator(char("abcdefghij"), 20, true)
+        repeat(10) {
+            assert(generator().size < generator.size)
+        }
     }
 }
