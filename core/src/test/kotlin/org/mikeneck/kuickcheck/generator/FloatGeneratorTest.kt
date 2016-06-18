@@ -27,28 +27,18 @@ class FloatGeneratorTest {
     }
 
     @Test
-    fun generatorGeneratesValuesSmallerThanMax() {
-        val generator = FloatGenerator(-3.2f, 50.1f)
+    fun generatorGeneratesValuesSmallerThanOrEqualToMax() {
+        val generator = FloatGenerator(0.0f, Float.MIN_VALUE)
         (1..120).forEach {
-            assert(generator.invoke() < 50.1f)
+            assert(generator.invoke() <= Float.MIN_VALUE)
         }
     }
 
     @Test
     fun generatorGeneratesValuesLargerThanOrEqualToMin() {
-        val generator = FloatGenerator(-3.2f, 50.1f)
+        val generator = FloatGenerator(0.0f, Float.MIN_VALUE)
         (1..120).forEach {
-            assert(generator.invoke() >= -3.2f)
-        }
-    }
-
-    @Test fun toggledGeneratorBecomesMaxInclusive() {
-        val generator = FloatGenerator(-3.2f, 50.1f).toggle()
-        (1..120).forEach {
-            val value = generator.invoke()
-            assert(value > -3.2f)
-            assert(value <= 50.1f)
-
+            assert(generator.invoke() >= 0.0f)
         }
     }
 
@@ -64,45 +54,6 @@ class FloatGeneratorTest {
             val negative = negativeFloat.invoke()
             val positive = positiveFloat.invoke()
             assert(negative < positive)
-        }
-    }
-}
-
-class ReverseFloatGeneratorTest {
-
-    @Test(expected = IllegalArgumentException::class)
-    fun ifMaxIsSmallerThanMinIllegalArgumentExceptionWillBeThrown() {
-        ToggledFloatGenerator(1.125f, 1.124f)
-    }
-
-    @Test fun generatorGeneratesValuesSmallerThanOrEqualToMax() {
-        val generator = ToggledFloatGenerator(-3.2f, 50.1f)
-        (1..120).forEach {
-            assert(generator.invoke() <= 50.1f)
-        }
-    }
-
-    @Test fun generatorGeneratesValuesLargerThanMin() {
-        val generator = ToggledFloatGenerator(-3.2f, 50.1f)
-        (1..120).forEach {
-            assert(generator.invoke() > -3.2f)
-        }
-    }
-
-    @Test fun toggledGeneratorBecomesMinInclusive() {
-        val generator = ToggledFloatGenerator(-3.2f, 50.1f).toggle()
-        (1..120).forEach {
-            val value = generator.invoke()
-            assert(value < 50.1f)
-            assert(value >= -3.2f)
-        }
-
-    }
-
-    @Test fun positiveFloatGeneratesPositiveValues() {
-        val generator = ToggledFloatGenerator(min = 0f)
-        (1..120).forEach {
-            assert(generator.invoke() > 0)
         }
     }
 }

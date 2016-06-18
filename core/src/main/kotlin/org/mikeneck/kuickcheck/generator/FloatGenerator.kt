@@ -15,45 +15,22 @@
  */
 package org.mikeneck.kuickcheck.generator
 
-import org.mikeneck.kuickcheck.TogglableGenerator
+import org.mikeneck.kuickcheck.Generator
 import org.mikeneck.kuickcheck.random.RandomSource
 
 /**
  * Generator for [Float].
  *
  * This generator generates value between `min`(inclusive) and `max`(exclusive).
- * Use [toggle] function to change the range's property(`min` to be exclusive, `max` to be inclusive).
  *
  * @property min the minimum value(inclusive) of the generator. `Float.MIN_VALUE` is default.
  * @property max the maximum value(exclusive) of the generator. `Float.MAX_VALUE` is default.
  */
-internal class FloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
+internal class FloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : Generator<Float> {
 
     init {
         if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
     }
 
     override fun invoke(): Float = RandomSource.nextFloat(min, max)
-
-    override fun toggle(): ToggledFloatGenerator = ToggledFloatGenerator(min, max)
-}
-
-/**
- * Generator for [Float].
- *
- * This generator generates value between `min`(exclusive) and `max`(inclusive).
- * Use [toggle] function to change the range's property(`min` to be inclusive, `max` to be exclusive).
- *
- * @property min the minimum value(exclusive) of the generator. `Float.MIN_VALUE` is default.
- * @property max the maximum value(inclusive) of the generator. `Float.MAX_VALUE` is default.
- */
-internal class ToggledFloatGenerator(val min: Float = -Float.MAX_VALUE, val max: Float = Float.MAX_VALUE) : TogglableGenerator<Float> {
-
-    init {
-        if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
-    }
-
-    override fun invoke(): Float = RandomSource.nextReverseFloat(min, max)
-
-    override fun toggle(): FloatGenerator = FloatGenerator(min, max)
 }

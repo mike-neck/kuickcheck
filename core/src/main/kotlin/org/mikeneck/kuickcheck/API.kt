@@ -45,10 +45,6 @@ interface Checker2<F, S>: Checker<Pair<F, S>>
 
 interface Generator<out T> : () -> T
 
-interface TogglableGenerator<out T> : Generator<T> {
-    fun toggle(): TogglableGenerator<T>
-}
-
 object KuickCheck {
 
     @JvmField val DEFAULT_REPEAT = 100
@@ -126,17 +122,17 @@ val alphaNumericChar: Generator<Char> = largeLetterChar + smallLetterChar + nume
 infix operator fun Generator<Char>.plus(o: Generator<Char>): Generator<Char> =
         (this as CharGenerator) + (o as CharGenerator)
 
-val float: TogglableGenerator<Float> = FloatGenerator()
+val float: Generator<Float> = FloatGenerator()
 
-val positiveFloat: Generator<Float> = ToggledFloatGenerator(min = 0f)
+val positiveFloat: Generator<Float> = FloatGenerator(min = Float.MIN_VALUE)
 
 val positiveFloatFrom0: Generator<Float> = FloatGenerator(min = 0f)
 
-val negativeFloat: Generator<Float> = FloatGenerator(max = 0f)
+val negativeFloat: Generator<Float> = FloatGenerator(max = -Float.MIN_VALUE)
 
-val negativeFloatTo0: Generator<Float> = ToggledFloatGenerator(max = 0f)
+val negativeFloatTo0: Generator<Float> = FloatGenerator(max = 0f)
 
-fun float(min: Float, max: Float): TogglableGenerator<Float> = FloatGenerator(min, max)
+fun float(min: Float, max: Float): Generator<Float> = FloatGenerator(min, max)
 
 val string: Generator<String> = AllStringGenerator()
 
