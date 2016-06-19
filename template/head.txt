@@ -2,10 +2,12 @@
 
 package org.mikeneck.kuickcheck.generator.function
 
-object FunctionUtil {
+internal object FunctionUtil {
 
 ${val}
 
 ${fun}
 
 }
+
+${classes}

@@ -1,0 +1,6 @@
+internal class Function${idx}Generator${var}(val f: (${type}) -> Unit, val g: org.mikeneck.kuickcheck.Generator<R>): org.mikeneck.kuickcheck.Generator<Function${idx}${param}> {
+
+    override fun invoke(): Function${idx}${param} {
+        return FunctionUtil.function(f, g)
+    }
+}

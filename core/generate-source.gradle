@@ -7,6 +7,9 @@ task funGenerator {
         dest.exists()
     }
     def dir = dest.parentFile
+    def engine = {
+        new SimpleTemplateEngine()
+    }
     doLast {
         def range = 0..22
 
@@ -14,25 +17,32 @@ task funGenerator {
             "${it % 4 == 0 ? '\n            ' : ''}Function${it}::class.java"
         }.join(', ')
 
-        def engine = new SimpleTemplateEngine()
-        def funTemplate = parent.file('template/function.txt')
         def funInfo = range.collect {
             it == 0 ? [idx: it, param: []] :
                     [param: new IntRange(1, it).collect { "P$it" }, idx: it]
         }.collect {
             def type = it.param.join(', ')
+            def v = it.param.collect { "in $it" }.join(', ')
             def zero = type.isEmpty()
             def param = "<${type}${zero ? '' : ', '}R>"
-            [idx: it.idx, type: type, param: param]
+            def vp = "<${v}${zero ? '' : ', '}out R>"
+            [idx: it.idx, type: type, param: param, var: vp]
         }
-        def fun = funInfo.collect {
-            engine.createTemplate(funTemplate).make(it).toString()
-        }.join('\n')
-        def map = [val: "    val functions = listOf($val)", fun: fun]
 
-        def engine2 = new SimpleTemplateEngine()
+        def funTemplate = parent.file('template/function.txt')
+        def fun = funInfo.collect {
+            engine().createTemplate(funTemplate).make(it).toString()
+        }.join('\n')
+
+        def classTemplate = parent.file('template/generator.txt')
+        def classes = funInfo.collect {
+            engine().createTemplate(classTemplate).make(it).toString()
+        }.join('\n')
+
+        def map = [val: "    val functions = listOf($val)", fun: fun, classes: classes]
+
         def ktTemplate = parent.file('template/head.txt')
-        def kt = engine2.createTemplate(ktTemplate).make(map).toString()
+        def kt = engine().createTemplate(ktTemplate).make(map).toString()
 
         if (!dir.exists()) {
             dir.mkdirs()
