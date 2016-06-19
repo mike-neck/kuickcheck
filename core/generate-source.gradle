@@ -16,7 +16,7 @@ task funGenerator {
 
         def engine = new SimpleTemplateEngine()
         def funTemplate = parent.file('template/function.txt')
-        def fun = range.collect {
+        def funInfo = range.collect {
             it == 0 ? [idx: it, param: []] :
                     [param: new IntRange(1, it).collect { "P$it" }, idx: it]
         }.collect {
@@ -24,7 +24,8 @@ task funGenerator {
             def zero = type.isEmpty()
             def param = "<${type}${zero ? '' : ', '}R>"
             [idx: it.idx, type: type, param: param]
-        }.collect {
+        }
+        def fun = funInfo.collect {
             engine.createTemplate(funTemplate).make(it).toString()
         }.join('\n')
         def map = [val: "    val functions = listOf($val)", fun: fun]
