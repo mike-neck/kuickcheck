@@ -1,0 +1,6 @@
+    fun ${param} function(f: (${type}) -> R, g: org.mikeneck.kuickcheck.Generator<R>): Function${idx}${param} {
+        val c = f.javaClass
+        @Suppress("UNCHECKED_CAST")
+        val k = c.interfaces.filter{ it in functions }.first()?.kotlin as kotlin.reflect.KClass<Function${idx}${param}>
+        return org.mikeneck.kuickcheck.generator.internal.FunctionInvocationHandler.createFunction(k, g)
+    }

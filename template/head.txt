@@ -1,0 +1,11 @@
+// do not modify because this is auto generated source code.
+
+package org.mikeneck.kuickcheck.generator.function
+
+object FunctionUtil {
+
+${val}
+
+${fun}
+
+}

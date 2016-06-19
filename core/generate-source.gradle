@@ -1,0 +1,42 @@
+import groovy.text.SimpleTemplateEngine
+
+task funGenerator {
+    def dest = file('src/main/generated/org/mikeneck/kuickcheck/generator/function/FunctionUtil.kt')
+    outputs.file(dest)
+    outputs.upToDateWhen {
+        dest.exists()
+    }
+    def dir = dest.parentFile
+    doLast {
+        def range = 0..22
+
+        def val = range.collect {
+            "${it % 4 == 0 ? '\n            ' : ''}Function${it}::class.java"
+        }.join(', ')
+
+        def engine = new SimpleTemplateEngine()
+        def funTemplate = parent.file('template/function.txt')
+        def fun = range.collect {
+            it == 0 ? [idx: it, param: []] :
+                    [param: new IntRange(1, it).collect { "P$it" }, idx: it]
+        }.collect {
+            def type = it.param.join(', ')
+            def zero = type.isEmpty()
+            def param = "<${type}${zero ? '' : ', '}R>"
+            [idx: it.idx, type: type, param: param]
+        }.collect {
+            engine.createTemplate(funTemplate).make(it).toString()
+        }.join('\n')
+        def map = [val: "    val functions = listOf($val)", fun: fun]
+
+        def engine2 = new SimpleTemplateEngine()
+        def ktTemplate = parent.file('template/head.txt')
+        def kt = engine2.createTemplate(ktTemplate).make(map).toString()
+
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+        dest.write(kt, 'UTF-8')
+    }
+}
+

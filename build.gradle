@@ -34,6 +34,7 @@ subprojects {
 project(':core') {
     apply plugin: 'maven'
     apply plugin: 'signing'
+    apply from: 'generate-source.gradle'
 
     dependencies {
         compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
@@ -43,6 +44,10 @@ project(':core') {
     jar {
         baseName = parent.name
         appendix = project.name
+    }
+
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main/generated'
     }
 
     task javadocJar(type: Jar) {
