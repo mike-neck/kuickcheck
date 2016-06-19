@@ -1,0 +1,5 @@
+// do not modify because this is auto generated source code.
+
+package org.mikeneck.kuickcheck
+
+${fun}

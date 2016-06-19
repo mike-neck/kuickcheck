@@ -26,7 +26,7 @@ object GettingStarted {
     val negativeValueIsSmallerThan0With200Times = forAll(negativeInt).satisfy { it < 0 } * 200
 
     @Property
-    val valueCanBeDevidedBy10IsMultipleOf5 =
+    val valueCanBeDividedBy10IsMultipleOf5 =
             forAll(positiveLongFrom0).filter { it % 10 == 0.toLong() }.satisfy { it % 5 == 0.toLong() }
 
     @Property
@@ -36,4 +36,9 @@ object GettingStarted {
     @Property
     val twiceReversedListEqualsToOriginal =
             forAll (list(int)).satisfy { it.reversed().reversed() == it }
+
+    @Property
+    val listSizeWontChangeByMapFunction =
+            forAll(list(string), function({ s: String -> }, positiveIntFrom0))
+                    .satisfy { list, function -> list.map(function).size == list.size }
 }

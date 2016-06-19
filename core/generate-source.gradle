@@ -1,12 +1,14 @@
 import groovy.text.SimpleTemplateEngine
 
 task funGenerator {
-    def dest = file('src/main/generated/org/mikeneck/kuickcheck/generator/function/FunctionUtil.kt')
-    outputs.file(dest)
+    def funcKt = file('src/main/generated/org/mikeneck/kuickcheck/generator/function/FunctionUtil.kt')
+    def apiKt = file('src/main/generated/org/mikeneck/kuickcheck/Functions.kt')
+    outputs.file(funcKt)
+    outputs.file(apiKt)
     outputs.upToDateWhen {
-        dest.exists()
+        funcKt.exists() && apiKt.exists()
     }
-    def dir = dest.parentFile
+    def dir = funcKt.parentFile
     def engine = {
         new SimpleTemplateEngine()
     }
@@ -41,13 +43,24 @@ task funGenerator {
 
         def map = [val: "    val functions = listOf($val)", fun: fun, classes: classes]
 
-        def ktTemplate = parent.file('template/head.txt')
-        def kt = engine().createTemplate(ktTemplate).make(map).toString()
+        def funKtTemplate = parent.file('template/head.txt')
+        def funContents = engine().createTemplate(funKtTemplate).make(map).toString()
 
         if (!dir.exists()) {
             dir.mkdirs()
         }
-        dest.write(kt, 'UTF-8')
+        funcKt.write(funContents, 'UTF-8')
+
+        def apiFunTemplate = parent.file('template/api-fun.txt')
+        def apiFun = funInfo.collect {
+            engine().createTemplate(apiFunTemplate).make(it)
+        }.join('\n')
+
+        def apiMap = [fun: apiFun]
+
+        def apiKtTemplate = parent.file('template/api.txt')
+        def apiContents = engine().createTemplate(apiKtTemplate).make(apiMap).toString()
+        apiKt.write(apiContents, 'UTF-8')
     }
 }
 

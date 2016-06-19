@@ -1,0 +1,1 @@
+fun ${param} function(f: (${type}) -> Unit, g: Generator<R>): Generator<Function${idx}${param}> = org.mikeneck.kuickcheck.generator.function.Function${idx}Generator(f, g)
