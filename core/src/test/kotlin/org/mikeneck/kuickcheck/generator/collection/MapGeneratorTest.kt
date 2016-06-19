@@ -89,3 +89,73 @@ class MapGeneratorTest {
         }
     }
 }
+
+class MutableMapGeneratorTest {
+
+    // map size <= max
+    @Test fun generatedMapHasSizeLessThanOrEqualToMax() {
+        val generator = MutableMapGenerator(int, string, 10)
+        repeat(120) {
+            assert(generator().size <= 10)
+        }
+    }
+
+    // map size >= 0
+    @Test fun generatedMapHasSizeMoreThanOrEqualTo0() {
+        val generator = MutableMapGenerator(int, string, 10)
+        repeat(120) {
+            assert(generator().size >= 0)
+        }
+    }
+
+    // map (init size 0) = 0
+    @Test fun generatorInitializedWithSize0AlwaysGeneratesEmptyMap() {
+        val generator = MutableMapGenerator(int, string, 0)
+        repeat(120) {
+            assert(generator().isEmpty())
+        }
+    }
+
+    // fixed size -> same size
+    @Test fun fixedSizedGeneratorGeneratesMapWithSameSize() {
+        val generator = MutableMapGenerator(int, string, 45, true)
+        repeat(120) {
+            assert(generator().size == 45)
+        }
+    }
+
+    // change size
+    @Test fun changeSize() {
+        val generator = MutableMapGenerator(int, string, 100).size(10)
+        repeat(120) {
+            assert(generator().size <= 10)
+        }
+    }
+
+    // fix size
+    @Test fun fixSize() {
+        val generator = MutableMapGenerator(int, string, 100).fixedSize(10)
+        repeat(120) {
+            assert(generator().size == 10)
+        }
+    }
+
+    // repeat 9 times -> full size
+    @Test fun repeat9TimesReturnsFullySizeGenerator() {
+        val generator = MutableMapGenerator(intGenerator(9), string, 20, true)
+        assert(generator().size == 20)
+    }
+
+    // repeat 10 times -> short size
+    @Test fun repeat10TimesReturnsShortSizedGenerator() {
+        val generator = MutableMapGenerator(intGenerator(10), string, 20, true)
+        assert(generator().size < 20)
+    }
+
+    @Test fun booleanKey() {
+        val generator = MutableMapGenerator(boolean, string, 20, true)
+        repeat(120) {
+            assert(generator().size == 2)
+        }
+    }
+}

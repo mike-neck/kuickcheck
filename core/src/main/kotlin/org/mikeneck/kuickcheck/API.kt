@@ -192,3 +192,6 @@ fun <T> mutableSet(type: Generator<T>): CollectionGenerator<Set<T>> =
 
 fun <K, V> map(key: Generator<K>, value: Generator<V>): CollectionGenerator<Map<K, V>> =
         MapGenerator(key, value)
+
+fun <K, V> mutableMap(key: Generator<K>, value: Generator<V>): CollectionGenerator<MutableMap<K, V>> =
+        MutableMapGenerator(key, value)
