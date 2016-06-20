@@ -48,6 +48,25 @@ object GettingStarted {
 }
 ----
 
+= Running Tests
+
+KuickCheck jar contains `main` function at `org.mikeneck.kuickcheck.KuickCheck` class.
+So you can run tests via `java -jar` command.
+
+== With Gradle
+
+Add a new task to run KuickCheck test by `JavaExec` task.
+
+.Running Tests
+[source,groovy]
+----
+task runTest(type: JavaExec) {
+  classpath sourceSets.test.runtimeClasspath
+  main = 'org.mikeneck.kuickcheck.KuickCheck'
+  standardOutput = System.out
+}
+----
+
 = License
 
 http://www.apache.org/licenses/LICENSE-2.0[Apache2]
