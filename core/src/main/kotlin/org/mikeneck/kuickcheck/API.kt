@@ -44,7 +44,14 @@ interface Checker<T> {
 
 interface Checker2<F, S>: Checker<Pair<F, S>>
 
-interface Generator<out T> : () -> T
+interface Generator<out T> : () -> T {
+    val _: Generator<T?>
+        get() = object : Generator<T?> {
+            override fun invoke(): T? {
+                
+            }
+        }
+}
 
 interface CollectionGenerator<out T> : Generator<T> {
     val size: Int

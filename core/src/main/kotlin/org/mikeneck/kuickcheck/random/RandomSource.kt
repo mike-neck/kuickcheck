@@ -21,6 +21,8 @@ object RandomSource {
 
     val random: Random = Random()
 
+    fun nextBoolean(): Boolean = random.nextBoolean()
+
     fun nextFloat(min: Float, max: Float): Float {
         val range = max - min
         return if (range == 0.toFloat()) min else min + range * nextFloat()
