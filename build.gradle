@@ -41,6 +41,8 @@ project(':core') {
         testCompile 'junit:junit:4.12'
     }
 
+    tasks.compileKotlin.dependsOn 'generateSource'
+
     jar {
         baseName = parent.name
         appendix = project.name

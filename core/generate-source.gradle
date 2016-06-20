@@ -1,6 +1,6 @@
 import groovy.text.SimpleTemplateEngine
 
-task funGenerator {
+task generateSource(group: 'Source Generation', description: 'Generates source code into src/main/generated') {
     def funcKt = file('src/main/generated/org/mikeneck/kuickcheck/generator/function/FunctionUtil.kt')
     def apiKt = file('src/main/generated/org/mikeneck/kuickcheck/Functions.kt')
     outputs.file(funcKt)
