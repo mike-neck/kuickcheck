@@ -68,6 +68,10 @@ project(':core') {
         archives tasks.javadocJar, tasks.sourcesJar
     }
 
+    signing {
+        sign configurations.archives
+    }
+
     uploadArchives {
         repositories {
             mavenDeployer {
