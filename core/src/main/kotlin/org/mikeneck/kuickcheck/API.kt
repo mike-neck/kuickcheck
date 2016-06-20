@@ -45,12 +45,8 @@ interface Checker<T> {
 interface Checker2<F, S>: Checker<Pair<F, S>>
 
 interface Generator<out T> : () -> T {
-    val _: Generator<T?>
-        get() = object : Generator<T?> {
-            override fun invoke(): T? {
-                
-            }
-        }
+    val nullable: Generator<T?>
+        get() = NullableGenerator(this)
 }
 
 interface CollectionGenerator<out T> : Generator<T> {

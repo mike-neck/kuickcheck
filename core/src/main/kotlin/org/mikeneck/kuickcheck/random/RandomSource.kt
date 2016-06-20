@@ -23,6 +23,10 @@ object RandomSource {
 
     fun nextBoolean(): Boolean = random.nextBoolean()
 
+    fun nextInt(): Int = random.nextInt()
+
+    fun nextInt(bound: Int) = random.nextInt(bound)
+
     fun nextFloat(min: Float, max: Float): Float {
         val range = max - min
         return if (range == 0.toFloat()) min else min + range * nextFloat()
