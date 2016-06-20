@@ -27,7 +27,7 @@ object GettingStarted {
 
     @Property
     val valueCanBeDividedBy10IsMultipleOf5 =
-            forAll(positiveLongFrom0).filter { it % 10 == 0.toLong() }.satisfy { it % 5 == 0.toLong() }
+            forAll(positiveLongFrom0).whenever { it % 10 == 0.toLong() }.satisfy { it % 5 == 0.toLong() }
 
     @Property
     val `positiveInt x negativeInt becomes negative` =

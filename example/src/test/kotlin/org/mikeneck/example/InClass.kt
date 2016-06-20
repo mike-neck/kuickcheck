@@ -23,7 +23,7 @@ import org.mikeneck.kuickcheck.long
 class InClass {
 
     @Property
-    val allMultiplesOf4AreMultiplesOf2 = forAll(int).filter { it % 4 == 0 }.satisfy { it % 2 == 0 }
+    val allMultiplesOf4AreMultiplesOf2 = forAll(int).whenever { it % 4 == 0 }.satisfy { it % 2 == 0 }
 
     @Property
     val negativeValueHasSameAbsoluteValue = forAll(long).satisfy { Math.abs(it) == Math.abs(-it) }

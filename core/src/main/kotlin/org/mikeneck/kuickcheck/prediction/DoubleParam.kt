@@ -24,7 +24,7 @@ fun <T, U> doubleParameterPrediction(gen1: Generator<T>, gen2: Generator<U>): Do
 
 interface DoubleParameterPrediction<T, U> {
     fun satisfy(predicate: (T, U) -> Boolean): Checker2<T, U>
-    fun filter(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U>
+    fun whenever(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U>
 }
 
 class DoubleArgumentPrediction<T, U>
@@ -41,7 +41,7 @@ class DoubleArgumentPrediction<T, U>
         }
     }
 
-    override fun filter(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U>
+    override fun whenever(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U>
             = DoubleArgumentFilteredPrediction(gen1, gen2, condition, repeatTime)
 }
 
@@ -62,7 +62,7 @@ class DoubleArgumentFilteredPrediction<T, U>
         }
     }
 
-    override fun filter(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U> {
+    override fun whenever(condition: (T, U) -> Boolean): DoubleParameterPrediction<T, U> {
         val con = {t: T, u: U ->
             this.condition.invoke(t, u) && condition.invoke(t, u)
         }

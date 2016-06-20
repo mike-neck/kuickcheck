@@ -32,7 +32,7 @@ class FunctionalPrediction<T>
         }
     }
 
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> {
+    override fun whenever(condition: (T) -> Boolean): SingleParameterPrediction<T> {
         return FunctionalFilteredPrediction(function, condition, repeatTime)
     }
 }
@@ -55,7 +55,7 @@ class FunctionalFilteredPrediction<T>
         }
     }
 
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> {
+    override fun whenever(condition: (T) -> Boolean): SingleParameterPrediction<T> {
         val con: (T) -> Boolean = { t ->
             this.condition.invoke(t) && condition.invoke(t)
         }

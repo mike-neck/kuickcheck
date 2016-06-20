@@ -21,7 +21,7 @@ import org.mikeneck.kuickcheck.KuickCheck
 
 interface SingleParameterPrediction<T> {
     fun satisfy(predicate: (T) -> Boolean): Checker<T>
-    fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T>
+    fun whenever(condition: (T) -> Boolean): SingleParameterPrediction<T>
 }
 
 internal fun <T> singleParameterPrediction(generator: Generator<T>): SingleParameterPrediction<T> =
@@ -39,7 +39,7 @@ class SingleParamPrediction<T>
         }
     }
 
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> =
+    override fun whenever(condition: (T) -> Boolean): SingleParameterPrediction<T> =
             SingleFilteredParamPrediction(generator, condition, repeatTime)
 }
 
@@ -60,7 +60,7 @@ class SingleFilteredParamPrediction<T>
         }
     }
 
-    override fun filter(condition: (T) -> Boolean): SingleParameterPrediction<T> {
+    override fun whenever(condition: (T) -> Boolean): SingleParameterPrediction<T> {
         val con: (T) -> Boolean = {t ->
             this.condition.invoke(t) && condition.invoke(t)
         }
