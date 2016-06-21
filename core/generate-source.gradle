@@ -15,10 +15,6 @@ task generateSource(group: 'Source Generation', description: 'Generates source c
     doLast {
         def range = 0..22
 
-        def val = range.collect {
-            "${it % 4 == 0 ? '\n            ' : ''}Function${it}::class.java"
-        }.join(', ')
-
         def funInfo = range.collect {
             it == 0 ? [idx: it, param: []] :
                     [param: new IntRange(1, it).collect { "P$it" }, idx: it]
@@ -41,7 +37,7 @@ task generateSource(group: 'Source Generation', description: 'Generates source c
             engine().createTemplate(classTemplate).make(it).toString()
         }.join('\n')
 
-        def map = [val: "    val functions = listOf($val)", fun: fun, classes: classes]
+        def map = [fun: fun, classes: classes]
 
         def funKtTemplate = parent.file('template/head.txt')
         def funContents = engine().createTemplate(funKtTemplate).make(map).toString()

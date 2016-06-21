@@ -4,8 +4,6 @@ package org.mikeneck.kuickcheck.generator.function
 
 internal object FunctionUtil {
 
-${val}
-
 ${fun}
 
 }
