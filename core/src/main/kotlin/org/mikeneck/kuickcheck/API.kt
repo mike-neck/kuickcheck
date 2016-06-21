@@ -86,6 +86,22 @@ val alwaysTrue: Generator<Boolean> = BooleanGenerator(true)
 
 val alwaysFalse: Generator<Boolean> = BooleanGenerator(false)
 
+val short: Generator<Short> = ShortGenerator()
+
+val positiveShort: Generator<Short> = ShortGenerator(min = 1)
+
+val positiveShortFrom0: Generator<Short> = ShortGenerator(min = 0)
+
+val negativeShort: Generator<Short> = ShortGenerator(max = -1)
+
+val negativeShortTo0: Generator<Short> = ShortGenerator(max = 0)
+
+fun short(min: Short, max: Short): Generator<Short> = ShortGenerator(min, max)
+
+val byte: Generator<Byte> = ByteGenerator()
+
+fun byte(min: Int, max: Int): Generator<Byte> = IntBasedByteGenerator(min, max)
+
 val int: Generator<Int> = IntGenerator(Int.MIN_VALUE, Int.MAX_VALUE)
 
 fun int(only: Int): Generator<Int> = IntGenerator(only, only)
