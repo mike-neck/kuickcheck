@@ -23,6 +23,11 @@ object RandomSource {
 
     fun nextBoolean(): Boolean = random.nextBoolean()
 
+    fun nextByte(min: Byte, max: Byte): Byte {
+        val range = max.toInt() - min.toInt() + 1
+        return (min.toInt() + nextInt(range)).toByte()
+    }
+
     fun nextShort(min: Short, max: Short): Short {
         val range = max.toInt() - min.toInt() + 1
         return (min + nextInt(range).toShort()).toShort()
