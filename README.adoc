@@ -1,5 +1,7 @@
 = kuickcheck
 
+image:https://app.wercker.com/status/ff9ea38222cd71c29bfa9062e2b7ac46/s[link="https://app.wercker.com/project/bykey/ff9ea38222cd71c29bfa9062e2b7ac46"]
+
 KuickCheck is a property based testing framework for https://kotlinlang.org/[Kotlin] inspired by another property based testing frameworks, especially https://github.com/rickynils/scalacheck[scalacheck], https://pholser.github.io/junit-quickcheck/site/0.6/index.html[junit-quickcheck].KuickCheck has no external dependencies other than Kotlin runtime and Kotlin reflection.
 
 = Download

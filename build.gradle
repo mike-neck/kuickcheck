@@ -11,6 +11,9 @@ ext {
     kotlinVersion = '1.0.2'
     jdk = '1.8'
     encoding = 'UTF-8'
+    canRelease = {
+        project.hasProperty('sonatypeUrl') && project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+    }
 }
 
 group = 'org.mikeneck'
@@ -72,39 +75,41 @@ project(':core') {
         sign configurations.archives
     }
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment {MavenDeployment deployment ->
-                    signing.signPom(deployment)
-                }
-                repository (url: sonatypeUrl) {
-                    authentication(userName: sonatypeUsername, password: sonatypePassword)
-                }
-                pom.project {
-                    name 'KuickCheck'
-                    packaging 'jar'
-                    description 'Property based testing framework for Kotlin'
-                    url 'https://github.com/mike-neck/kuickcheck'
-
-                    scm {
-                        connection 'scm:git:https://github.com/mike-neck/kuickcheck'
-                        developerConnection 'scm:git:https://github.com/mike-neck/kuickcheck'
+    if (canRelease()) {
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment ->
+                        signing.signPom(deployment)
+                    }
+                    repository(url: sonatypeUrl) {
+                        authentication(userName: sonatypeUsername, password: sonatypePassword)
+                    }
+                    pom.project {
+                        name 'KuickCheck'
+                        packaging 'jar'
+                        description 'Property based testing framework for Kotlin'
                         url 'https://github.com/mike-neck/kuickcheck'
-                    }
 
-                    licenses {
-                        license {
-                            name 'The Apache Software License, Version 2.0'
-                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        scm {
+                            connection 'scm:git:https://github.com/mike-neck/kuickcheck'
+                            developerConnection 'scm:git:https://github.com/mike-neck/kuickcheck'
+                            url 'https://github.com/mike-neck/kuickcheck'
                         }
-                    }
 
-                    developers {
-                        developer {
-                            id 'mikeneck'
-                            name 'Shinya Mochida'
-                            email 'jkrt3333[at]gmail.com'
+                        licenses {
+                            license {
+                                name 'The Apache Software License, Version 2.0'
+                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id 'mikeneck'
+                                name 'Shinya Mochida'
+                                email 'jkrt3333[at]gmail.com'
+                            }
                         }
                     }
                 }
