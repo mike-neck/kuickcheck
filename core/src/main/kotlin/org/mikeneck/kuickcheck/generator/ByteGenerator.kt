@@ -18,7 +18,7 @@ package org.mikeneck.kuickcheck.generator
 import org.mikeneck.kuickcheck.Generator
 import org.mikeneck.kuickcheck.random.RandomSource
 
-class ByteGenerator(val min: Byte = Byte.MIN_VALUE, val max: Byte = Byte.MAX_VALUE) : Generator<Byte> {
+internal class ByteGenerator(val min: Byte = Byte.MIN_VALUE, val max: Byte = Byte.MAX_VALUE) : Generator<Byte> {
 
     init {
         if (max < min) throw IllegalArgumentException("Max should be larger than min.[max: $max, min: $min]")
@@ -26,3 +26,5 @@ class ByteGenerator(val min: Byte = Byte.MIN_VALUE, val max: Byte = Byte.MAX_VAL
 
     override fun invoke(): Byte = RandomSource.nextByte(min, max)
 }
+
+

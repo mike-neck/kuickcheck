@@ -17,7 +17,7 @@ package org.mikeneck.kuickcheck.random
 
 import java.util.*
 
-object RandomSource {
+internal object RandomSource {
 
     val random: Random = Random()
 
