@@ -51,3 +51,39 @@ class ByteGeneratorTest {
         }
     }
 }
+
+class IntBasedByteGeneratorTest {
+
+    @Test(expected = IllegalArgumentException::class)
+    fun maxIsSmallerThanMinThenIllegalArgumentException() {
+        IntBasedByteGenerator(1, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun minIsSmallerThan0ThenIllegalArgumentException() {
+        IntBasedByteGenerator(min = -1)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun maxIsLargerThan255ThenIllegalArgumentException() {
+        IntBasedByteGenerator(max = 256)
+    }
+
+    @Test fun minEqualsToMaxThenGeneratorGeneratesTheSameValues() {
+        val generator = IntBasedByteGenerator(12, 12)
+        repeat(120) {
+            assert(generator() == 12.toByte())
+        }
+    }
+
+    @Test(timeout = 4000)
+    fun intBasedGeneratorGeneratesAllByteRange() {
+        val generator = IntBasedByteGenerator()
+        val map = (-128..127).map { Pair(it.toByte(), mutableListOf<Byte>()) }.toMap()
+        while (true) {
+            val b = generator()
+            map[b]?.add(b)
+            if (map.all { it.value.size > 0 }) break
+        }
+    }
+}

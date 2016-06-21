@@ -15,6 +15,7 @@
  */
 package org.mikeneck.kuickcheck.random
 
+import java.math.BigInteger
 import java.util.*
 
 internal object RandomSource {
@@ -36,6 +37,19 @@ internal object RandomSource {
     fun nextInt(): Int = random.nextInt()
 
     fun nextInt(bound: Int) = random.nextInt(bound)
+
+    fun nextInt(min: Int, max: Int): Int =
+            nextBigInt(
+                    BigInteger.valueOf(min.toLong()),
+                    BigInteger.valueOf(max.toLong())).toInt()
+
+    fun nextBigInt(min: BigInteger, max: BigInteger): BigInteger {
+        val range = max - min + BigInteger.ONE
+        while (true) {
+            val generated = BigInteger(range.bitLength(), random)
+            if (generated < range) return min + generated
+        }
+    }
 
     fun nextFloat(min: Float, max: Float): Float {
         val range = max - min

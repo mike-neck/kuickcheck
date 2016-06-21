@@ -27,4 +27,18 @@ internal class ByteGenerator(val min: Byte = Byte.MIN_VALUE, val max: Byte = Byt
     override fun invoke(): Byte = RandomSource.nextByte(min, max)
 }
 
+internal class IntBasedByteGenerator(val min: Int = MIN, val max: Int = MAX) : Generator<Byte> {
 
+    init {
+        if (max < min) throw IllegalArgumentException("Max should be larger than min. [max: $max, min: $min]")
+        if (min < MIN) throw IllegalArgumentException("Min should be larger than 0. [min: $min]")
+        if (max > MAX) throw IllegalArgumentException("Max should be smaller than 128. [max: $max]")
+    }
+
+    override fun invoke(): Byte = RandomSource.nextInt(min, max).toByte()
+
+    companion object {
+        val MIN: Int = 0
+        val MAX: Int = 255
+    }
+}
