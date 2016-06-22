@@ -22,6 +22,7 @@ interface Scannable {
     val validClassName: Boolean
     val klass: KClass<*>?
     val objectInstance: Boolean
+    val testable: Boolean
 }
 
 internal data class SingletonClass(
@@ -29,6 +30,7 @@ internal data class SingletonClass(
         override val klass: KClass<*>): Scannable {
     override val validClassName: Boolean = true
     override val objectInstance: Boolean = true
+    override val testable: Boolean = true
 }
 
 internal data class NormalClass(
@@ -36,6 +38,7 @@ internal data class NormalClass(
         override val klass: KClass<*>): Scannable {
     override val validClassName: Boolean = true
     override val objectInstance: Boolean = false
+    override val testable: Boolean = true
 }
 
 internal data class ExcludedClass(
@@ -43,6 +46,15 @@ internal data class ExcludedClass(
         override val klass: KClass<*>):Scannable {
     override val objectInstance: Boolean = false
     override val validClassName: Boolean = true
+    override val testable: Boolean = false
+}
+
+internal data class KtClass(
+        override val name: String,
+        override val klass: KClass<*>) : Scannable {
+    override val objectInstance: Boolean = false
+    override val validClassName: Boolean = true
+    override val testable: Boolean = false
 }
 
 internal data class NotFoundClass(
@@ -50,6 +62,7 @@ internal data class NotFoundClass(
     override val validClassName: Boolean = false
     override val klass: KClass<*>? = null
     override val objectInstance: Boolean = false
+    override val testable: Boolean = false
 }
 
 internal data class EnumClass(
@@ -57,6 +70,7 @@ internal data class EnumClass(
         override val klass: KClass<*>): Scannable {
     override val validClassName: Boolean = true
     override val objectInstance: Boolean = false
+    override val testable: Boolean = false
 }
 
 internal data class ThrowableClass(
@@ -64,6 +78,7 @@ internal data class ThrowableClass(
         override val klass: KClass<*>): Scannable {
     override val validClassName: Boolean = true
     override val objectInstance: Boolean = false
+    override val testable: Boolean = false
 }
 
 internal data class InterfaceClass(
@@ -71,4 +86,5 @@ internal data class InterfaceClass(
         override val klass: KClass<*>): Scannable {
     override val validClassName: Boolean = true
     override val objectInstance: Boolean = false
+    override val testable: Boolean = false
 }

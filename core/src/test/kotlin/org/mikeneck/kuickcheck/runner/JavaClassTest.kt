@@ -24,34 +24,38 @@ class JavaClassTest {
 
     class NotFoundJavaClassTest {
 
-        val notFound = JavaClass("org.mikeneck.kuickcheck.Foo")
+        val jClass = JavaClass("org.mikeneck.kuickcheck.Foo")
 
         @Test fun isNotFoundReturnsTrue() {
-            assert(notFound.isNotFound())
+            assert(jClass.isNotFound())
         }
 
         @Test fun isEnumReturnsTrue() {
-            assert(notFound.isEnum() == false)
+            assert(jClass.isEnum() == false)
         }
 
         @Test fun isInterfaceReturnsFalse() {
-            assert(notFound.isInterface() == false)
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
-            assert(notFound.isThrowable() == false)
+            assert(jClass.isThrowable() == false)
         }
 
         @Test fun isObjectReturnsFalse() {
-            assert(notFound.isObject() == false)
+            assert(jClass.isObject() == false)
         }
 
         @Test fun isExcludedClassReturnsFalse() {
-            assert(notFound.isExcludedClass() == false)
+            assert(jClass.isExcludedClass() == false)
         }
 
         @Test fun mapToScannableReturnsNotFoundClass() {
-            val scannable = notFound.mapToScannable()
+            val scannable = jClass.mapToScannable()
             assert(scannable is NotFoundClass)
         }
     }
@@ -75,6 +79,10 @@ class JavaClassTest {
 
         @Test fun isInterfaceReturnsFalse() {
             assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isReflectionProhibitedReturnsTrue() {
+            assert(jClass.isReflectionProhibited() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -110,6 +118,10 @@ class JavaClassTest {
 
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun isReflectionProhibitedReturnsTrue() {
+            assert(jClass.isReflectionProhibited() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -151,6 +163,10 @@ class JavaClassTest {
             assert(jClass.isEnum() == false)
         }
 
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
+        }
+
         @Test(expected = IllegalStateException::class)
         fun isThrowableReturnsFalse() {
             jClass.isThrowable()
@@ -188,6 +204,10 @@ class JavaClassTest {
 
         @Test fun isEnumReturnsTrue() {
             assert(jClass.isEnum() == true)
+        }
+
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -228,6 +248,10 @@ class JavaClassTest {
             assert(jClass.isEnum() == false)
         }
 
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
+        }
+
         @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
@@ -266,6 +290,10 @@ class JavaClassTest {
             assert(jClass.isEnum() == false)
         }
 
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
+        }
+
         @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
@@ -302,6 +330,10 @@ class JavaClassTest {
 
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -343,6 +375,10 @@ class JavaClassTest {
             assert(jClass.isEnum() == false)
         }
 
+        @Test fun isReflectionProhibitedReturnsFalse() {
+            assert(jClass.isReflectionProhibited() == false)
+        }
+
         @Test fun isThrowableReturnsTrue() {
             assert(jClass.isThrowable() == true)
         }
@@ -357,6 +393,49 @@ class JavaClassTest {
 
         @Test fun mapToScannableReturnsThrowableClass() {
             assert(jClass.mapToScannable() is ThrowableClass)
+        }
+    }
+
+    class ApiKtTest {
+
+        val jClass: JavaClass
+            get() {
+                val name = "org.mikeneck.kuickcheck.APIKt"
+                val klass = Class.forName(name)
+                return JavaClass(name, klass)
+            }
+
+        @Test fun isNotFoundReturnsFalse() {
+            assert(jClass.isNotFound() == false)
+        }
+
+        @Test fun isInterfaceReturnsFalse() {
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isEnumReturnsFalse() {
+            assert(jClass.isEnum() == false)
+        }
+
+        @Test fun isReflectionProhibitedReturnsTrue() {
+            assert(jClass.isReflectionProhibited() == true)
+        }
+
+        @Test fun isThrowableReturnsTrue() {
+            assert(jClass.isThrowable() == false)
+        }
+
+        @Test(expected = UnsupportedOperationException::class)
+        fun isObjectReturnsFalse() {
+            assert(jClass.isObject() == false)
+        }
+
+        @Test fun isExcludedClassReturnsFalse() {
+            assert(jClass.isExcludedClass() == false)
+        }
+
+        @Test fun mapToScannableReturnsThrowableClass() {
+            assert(jClass.mapToScannable() is KtClass)
         }
     }
 }

@@ -15,6 +15,8 @@
  */
 package org.mikeneck.kuickcheck.runner
 
+import kotlin.reflect.KotlinReflectionInternalError
+
 data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
 
     fun isNotFound(): Boolean = javaClass == null
@@ -22,6 +24,18 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
     fun isEnum(): Boolean = javaClass?.isEnum ?: false
 
     fun isInterface(): Boolean = javaClass?.isInterface ?: false
+
+    fun isReflectionProhibited(): Boolean {
+        if (javaClass == null) return false
+        return try {
+            javaClass.kotlin.constructors
+            false
+        } catch (e: KotlinReflectionInternalError) {
+            true
+        } catch (e: UnsupportedOperationException) {
+            true
+        }
+    }
 
     fun isThrowable(): Boolean {
         var clazz = javaClass ?: Any::class.java
@@ -47,6 +61,7 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
             if (isNotFound()) NotFoundClass(name)
             else if (isInterface()) InterfaceClass(name, javaClass!!.kotlin)
             else if (isExcludedClass()) ExcludedClass(name, javaClass!!.kotlin)
+            else if (isReflectionProhibited()) KtClass(name, javaClass!!.kotlin)
             else if (isEnum()) EnumClass(name, javaClass!!.kotlin)
             else if (isThrowable()) ThrowableClass(name, javaClass!!.kotlin)
             else if (isObject()) SingletonClass(name, javaClass!!.kotlin)
@@ -55,7 +70,6 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
     companion object {
         val EXCLUDED_NAMES = listOf(
                 EndsWith("${'$'}DefaultImpls"),
-                EndsWith("Kt"),
                 EndsWith("${'$'}WhenMappings"))
 
         fun inExcludeClass(name: String): Boolean =

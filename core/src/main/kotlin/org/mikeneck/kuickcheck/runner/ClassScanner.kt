@@ -72,7 +72,7 @@ object ClassScanner {
             else FileClassPath(entry)
 
     fun propertyScan(scannable: Scannable): List<TargetProperty> {
-        if (scannable is NotFoundClass || scannable is ExcludedClass) return emptyList()
+        if (scannable.testable == false) return emptyList()
         val cls = scannable.klass as KClass<*>
         return cls.members.filter { it.isAnnotated(Property::class) }
                 .filter { it.returnType.toString().contains(Checker::class.qualifiedName as String) }
