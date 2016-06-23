@@ -72,6 +72,6 @@ data class JarClassPath(val path: String): ClassPath {
                 .filter(ClassFile::isNotClosure)
                 .map(ClassFile::toJavaClass)
                 .map(JavaClass::mapToScannable)
-                .filter(Scannable::validClassName)
+                .filter(Scannable::nameProhibited)
     }
 }
