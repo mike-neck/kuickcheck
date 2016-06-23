@@ -38,8 +38,12 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -81,8 +85,12 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsTrue() {
-            assert(jClass.isReflectionProhibited() == true)
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -116,12 +124,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsTrue() {
-            assert(jClass.isReflectionProhibited() == true)
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -159,12 +171,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == true)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -202,12 +218,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsTrue() {
             assert(jClass.isEnum() == true)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -244,12 +264,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -286,12 +310,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -328,12 +356,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == true)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -371,12 +403,16 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsFalse() {
-            assert(jClass.isReflectionProhibited() == false)
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
         }
 
         @Test fun isThrowableReturnsTrue() {
@@ -413,15 +449,19 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun isReflectionProhibitedReturnsTrue() {
-            assert(jClass.isReflectionProhibited() == true)
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
         }
 
-        @Test fun isThrowableReturnsTrue() {
+        @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
 
@@ -436,6 +476,53 @@ class JavaClassTest {
 
         @Test fun mapToScannableReturnsThrowableClass() {
             assert(jClass.mapToScannable() is KtClass)
+        }
+    }
+
+    class ClosureClassTest {
+
+        val jClass: JavaClass
+            get() {
+                val name = "org.mikeneck.kuickcheck.generator.AllStringGenerator${'$'}invoke${'$'}1"
+                val klass = Class.forName(name)
+                return JavaClass(name, klass)
+            }
+
+        @Test fun isNotFoundReturnsFalse() {
+            assert(jClass.isNotFound() == false)
+        }
+
+        @Test fun isInterfaceReturnsFalse() {
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isClosureReturnsTrue() {
+            assert(jClass.isClosure() == true)
+        }
+
+        @Test fun isEnumReturnsFalse() {
+            assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun isThrowableReturnsFalse() {
+            assert(jClass.isThrowable() == false)
+        }
+
+        @Test(expected = UnsupportedOperationException::class)
+        fun isObjectReturnsFalse() {
+            assert(jClass.isObject() == false)
+        }
+
+        @Test fun isExcludedClassReturnsFalse() {
+            assert(jClass.isExcludedClass() == false)
+        }
+
+        @Test fun mapToScannableReturnsThrowableClass() {
+            assert(jClass.mapToScannable() is Closure)
         }
     }
 }

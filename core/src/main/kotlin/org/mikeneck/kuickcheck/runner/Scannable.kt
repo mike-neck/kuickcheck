@@ -58,6 +58,14 @@ internal data class ExcludedClass(
     override val testable: Boolean = false
 }
 
+internal data class Closure(
+        override val name: String,
+        override val klass: KClass<*>) : Scannable {
+    override val objectInstance: Boolean = false
+    override val nameProhibited: Boolean = false
+    override val testable: Boolean = false
+}
+
 internal data class KtClass(
         override val name: String,
         override val klass: KClass<*>) : Scannable {
