@@ -46,6 +46,10 @@ class JavaClassTest {
             assert(jClass.accessToConstructorProtected() == false)
         }
 
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
+        }
+
         @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
@@ -93,6 +97,10 @@ class JavaClassTest {
             assert(jClass.accessToConstructorProtected() == true)
         }
 
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
+        }
+
         @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
@@ -134,6 +142,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsTrue() {
             assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -183,6 +195,10 @@ class JavaClassTest {
             assert(jClass.accessToConstructorProtected() == false)
         }
 
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
+        }
+
         @Test(expected = IllegalStateException::class)
         fun isThrowableReturnsFalse() {
             jClass.isThrowable()
@@ -228,6 +244,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsFalse() {
             assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -276,6 +296,10 @@ class JavaClassTest {
             assert(jClass.accessToConstructorProtected() == false)
         }
 
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
+        }
+
         @Test fun isThrowableReturnsFalse() {
             assert(jClass.isThrowable() == false)
         }
@@ -289,7 +313,7 @@ class JavaClassTest {
         }
 
         @Test fun mapToScannableReturnsNormalClass() {
-            assert(jClass.mapToScannable() is NormalClass)
+            assert(jClass.mapToScannable() is EnumMember)
         }
     }
 
@@ -320,6 +344,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsFalse() {
             assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -366,6 +394,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsFalse() {
             assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -415,6 +447,10 @@ class JavaClassTest {
             assert(jClass.accessToConstructorProtected() == false)
         }
 
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
+        }
+
         @Test fun isThrowableReturnsTrue() {
             assert(jClass.isThrowable() == true)
         }
@@ -459,6 +495,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsTrue() {
             assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -506,6 +546,10 @@ class JavaClassTest {
 
         @Test fun accessToConstructorProtectedReturnsTrue() {
             assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {

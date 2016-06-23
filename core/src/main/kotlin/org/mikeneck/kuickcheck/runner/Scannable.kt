@@ -37,7 +37,7 @@ interface Scannable {
 internal data class SingletonClass(
         override val name: String,
         override val klass: KClass<*>): Scannable {
-    override val nameProhibited: Boolean = true
+    override val nameProhibited: Boolean = false
     override val objectInstance: Boolean = true
     override val testable: Boolean = true
 }
@@ -45,7 +45,7 @@ internal data class SingletonClass(
 internal data class NormalClass(
         override val name: String,
         override val klass: KClass<*>): Scannable {
-    override val nameProhibited: Boolean = true
+    override val nameProhibited: Boolean = false
     override val objectInstance: Boolean = false
     override val testable: Boolean = true
 }
@@ -85,7 +85,15 @@ internal data class NotFoundClass(
 internal data class EnumClass(
         override val name: String,
         override val klass: KClass<*>): Scannable {
-    override val nameProhibited: Boolean = true
+    override val nameProhibited: Boolean = false
+    override val objectInstance: Boolean = false
+    override val testable: Boolean = false
+}
+
+internal data class EnumMember(
+        override val name: String,
+        override val klass: KClass<*>) : Scannable {
+    override val nameProhibited: Boolean = false
     override val objectInstance: Boolean = false
     override val testable: Boolean = false
 }
@@ -93,7 +101,7 @@ internal data class EnumClass(
 internal data class ThrowableClass(
         override val name: String,
         override val klass: KClass<*>): Scannable {
-    override val nameProhibited: Boolean = true
+    override val nameProhibited: Boolean = false
     override val objectInstance: Boolean = false
     override val testable: Boolean = false
 }
@@ -101,7 +109,7 @@ internal data class ThrowableClass(
 internal data class InterfaceClass(
         override val name: String,
         override val klass: KClass<*>): Scannable {
-    override val nameProhibited: Boolean = true
+    override val nameProhibited: Boolean = false
     override val objectInstance: Boolean = false
     override val testable: Boolean = false
 }

@@ -83,6 +83,7 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
             else if (accessToConstructorProtected()) KtClass(name, javaClass.kotlin)
             else if (isEnum()) EnumClass(name, javaClass.kotlin)
             else if (isThrowable()) ThrowableClass(name, javaClass.kotlin)
+            else if (accessToMemberProtected()) EnumMember(name, javaClass.kotlin)
             else if (isObject()) SingletonClass(name, javaClass.kotlin)
             else NormalClass(name, javaClass.kotlin)
 
