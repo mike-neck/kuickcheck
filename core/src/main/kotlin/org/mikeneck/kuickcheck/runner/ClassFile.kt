@@ -17,6 +17,9 @@ package org.mikeneck.kuickcheck.runner
 
 import java.nio.file.Path
 
+/**
+ * This class represents class file and converts file name to class instance.
+ */
 interface ClassFile {
     fun isNotClosure(): Boolean
     fun toQualifiedClassName(): String
