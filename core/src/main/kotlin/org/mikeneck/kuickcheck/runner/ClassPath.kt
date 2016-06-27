@@ -21,20 +21,17 @@ import java.util.*
 import java.util.jar.JarFile
 
 interface ClassPath {
-    fun listClasses(): List<Scannable>
+    fun listClasses(): List<ClassFile>
 }
 
 data class FileClassPath(val path: String): ClassPath {
 
-    override fun listClasses(): List<Scannable> {
+    override fun listClasses(): List<ClassFile> {
         val path = Paths.get(path)
         if (Files.exists(path) == false) return emptyList()
         Files.walkFileTree(path, visitor)
         return visitor.list().map { it.toString() }
                 .map { RealClassFile(path, it) }
-                .filter(ClassFile::isNotClosure)
-                .map(ClassFile::toJavaClass)
-                .map(JavaClass::mapToScannable)
     }
 
     interface DirectoryScanner: FileVisitor<Path> {
@@ -61,7 +58,7 @@ data class JarClassPath(val path: String): ClassPath {
         val KOTLIN = listOf("/kotlin-stdlib/", "/kotlin-runtime/", "/kotlin-reflect/")
     }
 
-    override fun listClasses(): List<Scannable> {
+    override fun listClasses(): List<ClassFile> {
         val kotlinLib = KOTLIN.filter { path.contains(it) }.size > 0
         if (kotlinLib) return emptyList()
         val jarFile = JarFile(path)
@@ -69,9 +66,5 @@ data class JarClassPath(val path: String): ClassPath {
                 .filter { it.name.startsWith("META-INF") == false }
                 .map{ it.name }
                 .map(::ZipClassFile)
-                .filter(ClassFile::isNotClosure)
-                .map(ClassFile::toJavaClass)
-                .map(JavaClass::mapToScannable)
-                .filter(Scannable::nameProhibited)
     }
 }

@@ -32,6 +32,8 @@ object ClassScanner {
     fun prepareForCheck(): List<TargetProperty> {
         val classes = listClassPaths().map { classPath(it) }
                 .flatMap { it.listClasses() }
+                .map(ClassFile::toJavaClass)
+                .map(JavaClass::mapToScannable)
         val enums: Set<String> = classes.filter { it is EnumClass }.map { it.name }.toSet()
         val notEnumChild = notEnumChild(enums)
         return classes.filter(scanTarget)
