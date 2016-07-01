@@ -171,11 +171,12 @@ class FunctionUtilTest {
                 Function::class.java, Function0::class.java, Function1::class.java, Function2::class.java, Function3::class.java
         )
 
-        fun <P1, P2, R> function(f: (P1, P2) -> Unit, g: Generator<R>): (P1, P2) -> R {
+        @Suppress("UNUSED")
+        fun <P1, P2, R> function(@Suppress("UNUSED_PARAMETER") f: (P1, P2) -> Unit, g: Generator<R>): (P1, P2) -> R {
             return { p1, p2 -> g() }
         }
 
-        fun <P1, R> function(f: (P1) -> Unit, g: Generator<R>): (P1) -> R {
+        fun <P1, R> function(@Suppress("UNUSED_PARAMETER") f: (P1) -> Unit, g: Generator<R>): (P1) -> R {
             return { p1 -> g() }
         }
     }
