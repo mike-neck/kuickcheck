@@ -17,8 +17,10 @@ package org.mikeneck.kuickcheck.runner
 
 import java.nio.file.Path
 
+/**
+ * This class represents class file and converts file name to class instance.
+ */
 interface ClassFile {
-    fun isNotClosure(): Boolean
     fun toQualifiedClassName(): String
     fun toJavaClass(): JavaClass {
         val name = toQualifiedClassName()
@@ -29,24 +31,9 @@ interface ClassFile {
             return JavaClass(name)
         }
     }
-
-    companion object {
-        fun verifyNotClosure(name: String): Boolean {
-            return 0.rangeTo(name.length - 1)
-                    .map { name.codePointAt(it) }
-                    .map(Int::toChar).filter(Char::isDigit).size != name.length
-        }
-
-        fun isNotClosure(file: String): Boolean {
-            val className = file.removeSuffix(".class")
-                    .replace("/", "$").split("$").last()
-            return verifyNotClosure(className)
-        }
-    }
 }
 
 internal class RealClassFile(val parent: Path, val file: String): ClassFile {
-    override fun isNotClosure(): Boolean = ClassFile.isNotClosure(file)
 
     override fun toQualifiedClassName(): String {
         return file.removeSuffix(".class")
@@ -55,7 +42,6 @@ internal class RealClassFile(val parent: Path, val file: String): ClassFile {
 }
 
 internal class ZipClassFile(val file: String): ClassFile {
-    override fun isNotClosure(): Boolean = ClassFile.isNotClosure(file)
 
     override fun toQualifiedClassName(): String {
         return file.removeSuffix(".class").replace("/", ".")

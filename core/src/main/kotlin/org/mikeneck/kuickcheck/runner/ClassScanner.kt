@@ -32,6 +32,8 @@ object ClassScanner {
     fun prepareForCheck(): List<TargetProperty> {
         val classes = listClassPaths().map { classPath(it) }
                 .flatMap { it.listClasses() }
+                .map(ClassFile::toJavaClass)
+                .map(JavaClass::mapToScannable)
         val enums: Set<String> = classes.filter { it is EnumClass }.map { it.name }.toSet()
         val notEnumChild = notEnumChild(enums)
         return classes.filter(scanTarget)
@@ -72,7 +74,7 @@ object ClassScanner {
             else FileClassPath(entry)
 
     fun propertyScan(scannable: Scannable): List<TargetProperty> {
-        if (scannable is NotFoundClass || scannable is ExcludedClass) return emptyList()
+        if (scannable.testable == false) return emptyList()
         val cls = scannable.klass as KClass<*>
         return cls.members.filter { it.isAnnotated(Property::class) }
                 .filter { it.returnType.toString().contains(Checker::class.qualifiedName as String) }

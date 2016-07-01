@@ -16,48 +16,66 @@
 package org.mikeneck.kuickcheck.runner
 
 import org.junit.Test
-import org.junit.experimental.theories.DataPoints
-import org.junit.experimental.theories.Theories
-import org.junit.experimental.theories.Theory
-import org.junit.runner.RunWith
-import org.mikeneck.kuickcheck.InputAndExpect
+import java.nio.file.Paths
 
 class ClassFileTest {
 
-    @Test
-    fun onlyNumberIsClosure() {
-        assert(ClassFile.verifyNotClosure("1") == false)
-        assert(ClassFile.verifyNotClosure("2") == false)
+    @Test fun qualifiedClassName() {
+        val file = RealClassFile(path, classFile)
+        assert(file.toQualifiedClassName() == qualifiedClassName)
     }
 
-    @Test
-    fun onlyStringIsNotClosure() {
-        assert(ClassFile.verifyNotClosure("GettingStarted") == true)
+    @Test fun toJavaClass() {
+        val file = RealClassFile(path, classFile)
+        val javaClass = file.toJavaClass()
+        assert(javaClass.isNotFound() == false)
+    }
+
+    companion object {
+        val BASE = "core/build/classes/main"
+        val classFile = "$BASE/org/mikeneck/kuickcheck/prediction/DoubleArgumentFilteredPrediction.class"
+        val path = Paths.get(BASE)
+        val qualifiedClassName = "org.mikeneck.kuickcheck.prediction.DoubleArgumentFilteredPrediction"
     }
 }
 
-@RunWith(Theories::class)
-class IsNotClosure {
+class RealKtClassFileTest {
 
-    companion object {
-        @DataPoints
-        @JvmField val entries: Array<InputAndExpect<String, Boolean>> = arrayOf(
-                InputAndExpect("com/sample/compile/Bar${'$'}DefaultImpls.class", true),
-                InputAndExpect("com/sample/compile/Bar.class", true),
-                InputAndExpect("com/sample/compile/Color${'$'}BLACK.class", true),
-                InputAndExpect("com/sample/compile/Color${'$'}BLUE.class", true),
-                InputAndExpect("com/sample/compile/Color${'$'}WHITE.class", true),
-                InputAndExpect("com/sample/compile/Color.class", true),
-                InputAndExpect("com/sample/compile/Compile_sampleKt.class", true),
-                InputAndExpect("com/sample/compile/Foo${'$'}Companion${'$'}WhenMappings.class", true),
-                InputAndExpect("com/sample/compile/Foo${'$'}Companion.class", true),
-                InputAndExpect("com/sample/compile/Foo${'$'}upper${'$'}1.class", false),
-                InputAndExpect("com/sample/compile/Foo.class", true)
-        )
+    @Test fun qualifiedClassName() {
+        val file = RealClassFile(path, classFile)
+        assert(file.toQualifiedClassName() == qualifiedClassName)
     }
 
-    @Theory fun test(ie: InputAndExpect<String, Boolean>) {
-        val classFile = ZipClassFile(ie.input)
-        assert(classFile.isNotClosure() == ie.expect)
+    @Test fun toJavaClass() {
+        val file = RealClassFile(path, classFile)
+        val javaClass = file.toJavaClass()
+        assert(javaClass.isNotFound() == false)
+    }
+
+    companion object {
+        val BASE = "core/build/classes/main"
+        val classFile = "$BASE/org/mikeneck/kuickcheck/prediction/FunctionalPredictionKt.class"
+        val qualifiedClassName = "org.mikeneck.kuickcheck.prediction.FunctionalPredictionKt"
+        val path = Paths.get(BASE)
+    }
+}
+
+class ZipClassFileTest {
+
+    @Test fun qualifiedClassName() {
+        val file = ZipClassFile(classEntry)
+        assert(file.toQualifiedClassName() == qualifiedClass)
+    }
+
+    @Test fun toJavaClass() {
+        val file = ZipClassFile(classEntry)
+        val javaClass = file.toJavaClass()
+        assert(javaClass.isNotFound() == false)
+    }
+
+    companion object {
+        val classEntry = "org/mikeneck/kuickcheck/prediction/DoubleArgumentFilteredPrediction.class"
+
+        val qualifiedClass = "org.mikeneck.kuickcheck.prediction.DoubleArgumentFilteredPrediction"
     }
 }
