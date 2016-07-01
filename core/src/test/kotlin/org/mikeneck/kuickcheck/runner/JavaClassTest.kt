@@ -24,34 +24,46 @@ class JavaClassTest {
 
     class NotFoundJavaClassTest {
 
-        val notFound = JavaClass("org.mikeneck.kuickcheck.Foo")
+        val jClass = JavaClass("org.mikeneck.kuickcheck.Foo")
 
         @Test fun isNotFoundReturnsTrue() {
-            assert(notFound.isNotFound())
+            assert(jClass.isNotFound())
         }
 
         @Test fun isEnumReturnsTrue() {
-            assert(notFound.isEnum() == false)
+            assert(jClass.isEnum() == false)
         }
 
         @Test fun isInterfaceReturnsFalse() {
-            assert(notFound.isInterface() == false)
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
-            assert(notFound.isThrowable() == false)
+            assert(jClass.isThrowable() == false)
         }
 
         @Test fun isObjectReturnsFalse() {
-            assert(notFound.isObject() == false)
+            assert(jClass.isObject() == false)
         }
 
         @Test fun isExcludedClassReturnsFalse() {
-            assert(notFound.isExcludedClass() == false)
+            assert(jClass.isExcludedClass() == false)
         }
 
         @Test fun mapToScannableReturnsNotFoundClass() {
-            val scannable = notFound.mapToScannable()
+            val scannable = jClass.mapToScannable()
             assert(scannable is NotFoundClass)
         }
     }
@@ -75,6 +87,18 @@ class JavaClassTest {
 
         @Test fun isInterfaceReturnsFalse() {
             assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -108,8 +132,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -147,8 +183,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == true)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -186,8 +234,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsTrue() {
             assert(jClass.isEnum() == true)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -224,8 +284,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -241,7 +313,7 @@ class JavaClassTest {
         }
 
         @Test fun mapToScannableReturnsNormalClass() {
-            assert(jClass.mapToScannable() is NormalClass)
+            assert(jClass.mapToScannable() is EnumMember)
         }
     }
 
@@ -262,8 +334,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test fun isThrowableReturnsFalse() {
@@ -300,8 +384,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == true)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsFalse() {
+            assert(jClass.accessToMemberProtected() == false)
         }
 
         @Test(expected = IllegalStateException::class)
@@ -339,8 +435,20 @@ class JavaClassTest {
             assert(jClass.isInterface() == false)
         }
 
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
         @Test fun isEnumReturnsFalse() {
             assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsFalse() {
+            assert(jClass.accessToConstructorProtected() == false)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
         }
 
         @Test fun isThrowableReturnsTrue() {
@@ -357,6 +465,108 @@ class JavaClassTest {
 
         @Test fun mapToScannableReturnsThrowableClass() {
             assert(jClass.mapToScannable() is ThrowableClass)
+        }
+    }
+
+    class ApiKtTest {
+
+        val jClass: JavaClass
+            get() {
+                val name = "org.mikeneck.kuickcheck.APIKt"
+                val klass = Class.forName(name)
+                return JavaClass(name, klass)
+            }
+
+        @Test fun isNotFoundReturnsFalse() {
+            assert(jClass.isNotFound() == false)
+        }
+
+        @Test fun isInterfaceReturnsFalse() {
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isClosureReturnsFalse() {
+            assert(jClass.isClosure() == false)
+        }
+
+        @Test fun isEnumReturnsFalse() {
+            assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
+        }
+
+        @Test fun isThrowableReturnsFalse() {
+            assert(jClass.isThrowable() == false)
+        }
+
+        @Test(expected = UnsupportedOperationException::class)
+        fun isObjectReturnsFalse() {
+            assert(jClass.isObject() == false)
+        }
+
+        @Test fun isExcludedClassReturnsFalse() {
+            assert(jClass.isExcludedClass() == false)
+        }
+
+        @Test fun mapToScannableReturnsThrowableClass() {
+            assert(jClass.mapToScannable() is KtClass)
+        }
+    }
+
+    class ClosureClassTest {
+
+        val jClass: JavaClass
+            get() {
+                val name = "org.mikeneck.kuickcheck.generator.AllStringGenerator${'$'}invoke${'$'}1"
+                val klass = Class.forName(name)
+                return JavaClass(name, klass)
+            }
+
+        @Test fun isNotFoundReturnsFalse() {
+            assert(jClass.isNotFound() == false)
+        }
+
+        @Test fun isInterfaceReturnsFalse() {
+            assert(jClass.isInterface() == false)
+        }
+
+        @Test fun isClosureReturnsTrue() {
+            assert(jClass.isClosure() == true)
+        }
+
+        @Test fun isEnumReturnsFalse() {
+            assert(jClass.isEnum() == false)
+        }
+
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
+        }
+
+        @Test fun accessToMemberProtectedReturnsTrue() {
+            assert(jClass.accessToMemberProtected() == true)
+        }
+
+        @Test fun isThrowableReturnsFalse() {
+            assert(jClass.isThrowable() == false)
+        }
+
+        @Test(expected = UnsupportedOperationException::class)
+        fun isObjectReturnsFalse() {
+            assert(jClass.isObject() == false)
+        }
+
+        @Test fun isExcludedClassReturnsFalse() {
+            assert(jClass.isExcludedClass() == false)
+        }
+
+        @Test fun mapToScannableReturnsThrowableClass() {
+            assert(jClass.mapToScannable() is Closure)
         }
     }
 }
