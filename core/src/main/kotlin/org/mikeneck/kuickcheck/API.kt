@@ -214,6 +214,10 @@ val dayInThisYear: DateGeneratorOfYear = DateGenerator.thisYear()
 
 fun dayInTheYear(year: Int): DateGeneratorOfYear = DateGenerator.ofYear(year)
 
+inline fun <reified E : Enum<E>> enum(): Generator<E> = EnumGenerator(E::class.java.enumConstants.asList())
+
+inline fun <reified E : Enum<E>> enum(vararg values: E): Generator<E> = EnumGenerator(values.asList())
+
 fun <T> list(type: Generator<T>): CollectionGenerator<List<T>> = ListGenerator(type)
 
 fun <T> mutableList(type: Generator<T>): CollectionGenerator<MutableList<T>> =
