@@ -20,6 +20,7 @@ import org.mikeneck.kuickcheck.generator.collection.*
 import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
+import java.math.BigDecimal
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -129,6 +130,18 @@ val negativeLong: Generator<Long> = LongGenerator(Long.MIN_VALUE, -1)
 val negativeLongTo0: Generator<Long> = LongGenerator(Long.MIN_VALUE, 0)
 
 fun long(min: Long, max: Long): Generator<Long> = LongGenerator(min, max)
+
+val bigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal(Double.MAX_VALUE))
+
+fun bigDecimal(only: BigDecimal): Generator<BigDecimal> = BigDecimalGenerator(only, only)
+
+val positiveBigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal.ONE, BigDecimal(Double.MAX_VALUE))
+
+val positiveBigDecimalFrom0: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal.ZERO, BigDecimal(Double.MAX_VALUE))
+
+val negativeBigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal.ONE.negate())
+
+val negativeBigDecimalTo0: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal.ZERO)
 
 val char: Generator<Char> = CharGenerator(Character.MIN_VALUE, Character.MAX_VALUE)
 
