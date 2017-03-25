@@ -47,6 +47,8 @@ interface Checker2<F, S>: Checker<Pair<F, S>>
 interface Generator<out T> : () -> T {
     val nullable: Generator<T?>
         get() = NullableGenerator(this)
+    val optional: Generator<Optional<out T>>
+        get() = OptionalGenerator(this)
 }
 
 interface CollectionGenerator<out T> : Generator<T> {
