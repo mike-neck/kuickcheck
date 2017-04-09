@@ -3,12 +3,11 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.3'
+        classpath "$kotlinGroup:$kotlinGradlePlugin:$kotlinVersion"
     }
 }
 
 ext {
-    kotlinVersion = '1.0.3'
     jdk = '1.8'
     encoding = 'UTF-8'
     canRelease = {
@@ -20,7 +19,7 @@ group = 'org.mikeneck'
 version = '0.1.1'
 
 subprojects {
-    apply plugin: 'kotlin'
+    apply plugin: kotlin
 
     group = parent.group
     version = parent.version
@@ -30,7 +29,7 @@ subprojects {
     }
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+        compile "$kotlinGroup:$kotlinStdLib:$kotlinVersion"
     }
 }
 
@@ -40,7 +39,7 @@ project(':core') {
     apply from: 'generate-source.gradle'
 
     dependencies {
-        compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        compile "$kotlinGroup:$kotlinReflect:$kotlinVersion"
         testCompile 'junit:junit:4.12'
     }
 
@@ -83,6 +82,7 @@ project(':core') {
                         signing.signPom(deployment)
                     }
                     repository(url: sonatypeUrl) {
+                        //noinspection GroovyAssignabilityCheck
                         authentication(userName: sonatypeUsername, password: sonatypePassword)
                     }
                     pom.project {
@@ -135,6 +135,7 @@ project(':example') {
         classpath sourceSets.test.runtimeClasspath
         main = 'org.mikeneck.kuickcheck.KuickCheck'
         standardOutput = System.out
+        //noinspection GroovyAssignabilityCheck
         args '--debug'
     }
 }

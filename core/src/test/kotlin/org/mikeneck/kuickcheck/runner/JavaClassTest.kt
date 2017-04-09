@@ -292,8 +292,8 @@ class JavaClassTest {
             assert(jClass.isEnum() == false)
         }
 
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
+        @Test fun accessToConstructorProtectedReturnsTrue() {
+            assert(jClass.accessToConstructorProtected() == true)
         }
 
         @Test fun accessToMemberProtectedReturnsTrue() {

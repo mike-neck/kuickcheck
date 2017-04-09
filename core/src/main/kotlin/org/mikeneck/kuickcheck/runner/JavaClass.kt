@@ -15,7 +15,7 @@
  */
 package org.mikeneck.kuickcheck.runner
 
-import kotlin.reflect.KotlinReflectionInternalError
+import kotlin.reflect.jvm.internal.KotlinReflectionInternalError
 
 data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
 
@@ -80,10 +80,10 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
             else if (isInterface()) InterfaceClass(name, javaClass.kotlin)
             else if (isClosure()) Closure(name, javaClass.kotlin)
             else if (isExcludedClass()) ExcludedClass(name, javaClass.kotlin)
-            else if (accessToConstructorProtected()) KtClass(name, javaClass.kotlin)
-            else if (isEnum()) EnumClass(name, javaClass.kotlin)
             else if (isThrowable()) ThrowableClass(name, javaClass.kotlin)
+            else if (isEnum()) EnumClass(name, javaClass.kotlin)
             else if (accessToMemberProtected()) EnumMember(name, javaClass.kotlin)
+            else if (accessToConstructorProtected()) KtClass(name, javaClass.kotlin)
             else if (isObject()) SingletonClass(name, javaClass.kotlin)
             else NormalClass(name, javaClass.kotlin)
 
@@ -93,6 +93,6 @@ data class JavaClass(val name: String, val javaClass: Class<*>? = null) {
                 EndsWith("${'$'}WhenMappings"))
 
         fun inExcludeClass(name: String): Boolean =
-                EXCLUDED_NAMES.filter { it.match(name) }.size > 0
+                EXCLUDED_NAMES.filter { it.match(name) }.isNotEmpty()
     }
 }
