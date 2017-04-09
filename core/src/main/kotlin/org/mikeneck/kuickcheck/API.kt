@@ -20,6 +20,7 @@ import org.mikeneck.kuickcheck.generator.collection.*
 import org.mikeneck.kuickcheck.prediction.*
 import org.mikeneck.kuickcheck.runner.ClassScanner
 import org.mikeneck.kuickcheck.runner.toSummary
+import java.math.BigDecimal
 import java.util.*
 import kotlin.system.exitProcess
 
@@ -47,6 +48,8 @@ interface Checker2<F, S>: Checker<Pair<F, S>>
 interface Generator<out T> : () -> T {
     val nullable: Generator<T?>
         get() = NullableGenerator(this)
+    val optional: Generator<Optional<out T>>
+        get() = OptionalGenerator(this)
 }
 
 interface CollectionGenerator<out T> : Generator<T> {
@@ -128,6 +131,18 @@ val negativeLongTo0: Generator<Long> = LongGenerator(Long.MIN_VALUE, 0)
 
 fun long(min: Long, max: Long): Generator<Long> = LongGenerator(min, max)
 
+val bigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal(Double.MAX_VALUE))
+
+fun bigDecimal(only: BigDecimal): Generator<BigDecimal> = BigDecimalGenerator(only, only)
+
+val positiveBigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal.ONE, BigDecimal(Double.MAX_VALUE))
+
+val positiveBigDecimalFrom0: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal.ZERO, BigDecimal(Double.MAX_VALUE))
+
+val negativeBigDecimal: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal.ONE.negate())
+
+val negativeBigDecimalTo0: Generator<BigDecimal> = BigDecimalGenerator(BigDecimal(-Double.MAX_VALUE), BigDecimal.ZERO)
+
 val char: Generator<Char> = CharGenerator(Character.MIN_VALUE, Character.MAX_VALUE)
 
 fun char(ch: Char): Generator<Char> = CharGenerator(ch, ch)
@@ -198,6 +213,10 @@ val dayInThisMonth: Generator<Date> = DateGenerator.thisMonth()
 val dayInThisYear: DateGeneratorOfYear = DateGenerator.thisYear()
 
 fun dayInTheYear(year: Int): DateGeneratorOfYear = DateGenerator.ofYear(year)
+
+inline fun <reified E : Enum<E>> enum(): Generator<E> = EnumGenerator(E::class.java.enumConstants.asList())
+
+inline fun <reified E : Enum<E>> enum(vararg values: E): Generator<E> = EnumGenerator(values.asList())
 
 fun <T> list(type: Generator<T>): CollectionGenerator<List<T>> = ListGenerator(type)
 
