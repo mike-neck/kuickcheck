@@ -4,6 +4,7 @@ apply plugin: junitPlugin
 
 dependencies {
     testCompile "$spekGroup:$spekApi:$spekVersion"
+    testCompile "$spekGroup:$spekJunitPlatform:$spekVersion"
 }
 
 jar {
