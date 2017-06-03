@@ -15,4 +15,5 @@
  */
 package org.mikeneck.kuickcheck
 
-
+fun <T : Any> block(blk: () -> T): T = blk()
+fun fail(message: String = ""): Unit = throw AssertionError(message)
