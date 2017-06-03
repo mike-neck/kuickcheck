@@ -557,7 +557,10 @@ object ClosureClassSpek : Spek({
     }
 
     it("isObject returns false") {
-        assert(jClass.isObject() == false)
+        try {
+            assert(jClass.isObject() == false)
+        } catch(e: UnsupportedOperationException) {
+        }
     }
 
     it("isExcludedClass function returns false") {
