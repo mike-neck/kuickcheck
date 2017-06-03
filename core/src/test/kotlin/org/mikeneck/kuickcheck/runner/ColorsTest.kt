@@ -15,26 +15,20 @@
  */
 package org.mikeneck.kuickcheck.runner
 
-import org.junit.Test
-
 class ColorsTest {
 
-    @Test
     fun green() {
         Colors.greenln("test")
     }
 
-    @Test
     fun red() {
         Colors.redln("failure")
     }
 
-    @Test
     fun yellow() {
         Colors.yellowln("error")
     }
 
-    @Test
     fun pink() {
         Colors.pinkln("what's this")
     }

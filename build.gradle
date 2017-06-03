@@ -49,7 +49,6 @@ project(':core') {
     dependencies {
         compile project(':api')
         compile "$kotlinGroup:$kotlinReflect:$kotlinVersion"
-        testCompile 'junit:junit:4.12'
     }
 
     tasks.compileKotlin.dependsOn 'generateSource'

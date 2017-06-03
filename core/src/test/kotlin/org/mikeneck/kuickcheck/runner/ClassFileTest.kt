@@ -15,17 +15,16 @@
  */
 package org.mikeneck.kuickcheck.runner
 
-import org.junit.Test
 import java.nio.file.Paths
 
 class ClassFileTest {
 
-    @Test fun qualifiedClassName() {
+    fun qualifiedClassName() {
         val file = RealClassFile(path, classFile)
         assert(file.toQualifiedClassName() == qualifiedClassName)
     }
 
-    @Test fun toJavaClass() {
+    fun toJavaClass() {
         val file = RealClassFile(path, classFile)
         val javaClass = file.toJavaClass()
         assert(javaClass.isNotFound() == false)
@@ -41,12 +40,12 @@ class ClassFileTest {
 
 class RealKtClassFileTest {
 
-    @Test fun qualifiedClassName() {
+    fun qualifiedClassName() {
         val file = RealClassFile(path, classFile)
         assert(file.toQualifiedClassName() == qualifiedClassName)
     }
 
-    @Test fun toJavaClass() {
+    fun toJavaClass() {
         val file = RealClassFile(path, classFile)
         val javaClass = file.toJavaClass()
         assert(javaClass.isNotFound() == false)
@@ -62,12 +61,12 @@ class RealKtClassFileTest {
 
 class ZipClassFileTest {
 
-    @Test fun qualifiedClassName() {
+    fun qualifiedClassName() {
         val file = ZipClassFile(classEntry)
         assert(file.toQualifiedClassName() == qualifiedClass)
     }
 
-    @Test fun toJavaClass() {
+    fun toJavaClass() {
         val file = ZipClassFile(classEntry)
         val javaClass = file.toJavaClass()
         assert(javaClass.isNotFound() == false)
