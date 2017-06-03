@@ -1,0 +1,29 @@
+apply plugin: kotlin
+apply plugin: dokkaPlugin
+apply plugin: junitPlugin
+
+dependencies {
+    testCompile "$spekGroup:$spekApi:$spekVersion"
+}
+
+jar {
+    baseName = parent.name
+    appendix = project.name
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "${project.buildDir}/javadoc"
+}
+
+task javadocJar(type: Jar) {
+    baseName = project.parent.name
+    appendix = project.name
+    classifier = 'javadoc'
+    from tasks.dokka
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
