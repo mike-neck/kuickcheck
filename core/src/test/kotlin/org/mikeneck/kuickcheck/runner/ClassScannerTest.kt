@@ -15,12 +15,9 @@
  */
 package org.mikeneck.kuickcheck.runner
 
-import org.junit.Test
-
 class ClassScannerTest {
 
     @Suppress("UNUSED_VARIABLE")
-    @Test(expected = UnsupportedOperationException::class)
     fun scanDefaultImpl() {
         val klass = Class.forName("org.mikeneck.kuickcheck.Checker${'$'}DefaultImpls")
         val kt = klass?.kotlin

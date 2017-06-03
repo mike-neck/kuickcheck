@@ -13,4 +13,4 @@ _cache/
 _projects/
 _steps/
 
-
+**/*.ktx

@@ -15,560 +15,558 @@
  */
 package org.mikeneck.kuickcheck.runner
 
-import org.junit.Test
-import org.junit.experimental.runners.Enclosed
-import org.junit.runner.RunWith
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
+import org.mikeneck.kuickcheck.block
+import org.mikeneck.kuickcheck.fail
 
-@RunWith(Enclosed::class)
-class JavaClassTest {
+object NotFoundJavaClassSpek : Spek({
 
-    class NotFoundJavaClassTest {
+    val jClass = JavaClass("org.mikeneck.kuickcheck.Foo")
 
-        val jClass = JavaClass("org.mikeneck.kuickcheck.Foo")
-
-        @Test fun isNotFoundReturnsTrue() {
-            assert(jClass.isNotFound())
-        }
-
-        @Test fun isEnumReturnsTrue() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
-
-        @Test fun accessToMemberProtectedReturnsFalse() {
-            assert(jClass.accessToMemberProtected() == false)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsNotFoundClass() {
-            val scannable = jClass.mapToScannable()
-            assert(scannable is NotFoundClass)
-        }
+    it("isNotFound function returns true") {
+        assert(jClass.isNotFound())
     }
 
-    class DefaultImplsClassTest {
-
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.runner.TestResult${'$'}DefaultImpls"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
-
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsTrue() {
-            assert(jClass.accessToConstructorProtected() == true)
-        }
-
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test fun isExcludeClassReturnsTrue() {
-            assert(jClass.isExcludedClass() == true)
-        }
-
-        @Test fun mapToScannableReturnsExcludedClass() {
-            val scannable = jClass.mapToScannable()
-            assert(scannable is ExcludedClass)
-        }
+    it("isEnum function returns true") {
+        assert(jClass.isEnum() == false)
     }
 
-    class WhenMappingsClassTest {
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
 
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.runner.TestSummary${'$'}WhenMappings"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
 
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
 
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
+    it("accessToMemberProtected function returns false") {
+        assert(jClass.accessToMemberProtected() == false)
+    }
 
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
 
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
+    }
 
-        @Test fun accessToConstructorProtectedReturnsTrue() {
-            assert(jClass.accessToConstructorProtected() == true)
-        }
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
 
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
+    it("mapToScannable function returnsNotFoundClass") {
+        val scannable = jClass.mapToScannable()
+        assert(scannable is NotFoundClass)
+    }
+})
 
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
+object DefaultImplsClassSpek : Spek({
 
-        @Test(expected = UnsupportedOperationException::class)
-        fun isObjectReturnsFalse() {
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.runner.TestResult${'$'}DefaultImpls"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("accessToConstructorProtected function returns true") {
+        assert(jClass.accessToConstructorProtected() == true)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isExcludeClass function returns true") {
+        assert(jClass.isExcludedClass() == true)
+    }
+
+    it("mapToScannable function returnsExcludedClass") {
+        val scannable = jClass.mapToScannable()
+        assert(scannable is ExcludedClass)
+    }
+})
+
+object WhenMappingsClassSpek : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.runner.TestSummary${'$'}WhenMappings"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns true") {
+        assert(jClass.accessToConstructorProtected() == true)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isObject fails") {
+        try {
             jClass.isObject()
-        }
-
-        @Test fun isExcludedClassReturnsTrue() {
-            assert(jClass.isExcludedClass() == true)
-        }
-
-        @Test fun mapToScannableReturnsExcludedClass() {
-            assert(jClass.mapToScannable() is ExcludedClass)
+            fail()
+        } catch (e: UnsupportedOperationException) {
         }
     }
 
-    class InterfaceClassTest {
+    it("isExcludedClass function returns true") {
+        assert(jClass.isExcludedClass() == true)
+    }
 
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.Checker"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
+    it("mapToScannable function returnsExcludedClass") {
+        assert(jClass.mapToScannable() is ExcludedClass)
+    }
+})
 
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
+object InterfaceClassSpek : Spek({
 
-        @Test fun isInterfaceReturnsTrue() {
-            assert(jClass.isInterface() == true)
-        }
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.Checker"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
 
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
 
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
+    it("isInterface function returns true") {
+        assert(jClass.isInterface() == true)
+    }
 
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
 
-        @Test fun accessToMemberProtectedReturnsFalse() {
-            assert(jClass.accessToMemberProtected() == false)
-        }
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
 
-        @Test(expected = IllegalStateException::class)
-        fun isThrowableReturnsFalse() {
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
+
+    it("accessToMemberProtected function returns false") {
+        assert(jClass.accessToMemberProtected() == false)
+    }
+
+    it("isThrowable function fails") {
+        try {
             jClass.isThrowable()
-        }
-
-        @Test fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsInterfaceClass() {
-            assert(jClass.mapToScannable() is InterfaceClass)
+            fail()
+        } catch (e: IllegalStateException) {
         }
     }
 
-    class EnumClassTest {
-
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.runner.Color"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
-
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun isEnumReturnsTrue() {
-            assert(jClass.isEnum() == true)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
-
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsEnumClass() {
-            assert(jClass.mapToScannable() is EnumClass)
-        }
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
     }
 
-    class EnumMemberClass {
-
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.runner.Color${'$'}PINK"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
-
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsTrue() {
-            assert(jClass.accessToConstructorProtected() == true)
-        }
-
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsNormalClass() {
-            assert(jClass.mapToScannable() is EnumMember)
-        }
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
     }
 
-    class ObjectClass {
+    it("mapToScannable function returnsInterfaceClass") {
+        assert(jClass.mapToScannable() is InterfaceClass)
+    }
+})
 
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.KuickCheck"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
+object EnumClassSpek : Spek({
 
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
-
-        @Test fun accessToMemberProtectedReturnsFalse() {
-            assert(jClass.accessToMemberProtected() == false)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test fun isObjectReturnsTrue() {
-            assert(jClass.isObject() == true)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsSingletonClass() {
-            assert(jClass.mapToScannable() is SingletonClass)
-        }
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.runner.Color"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
     }
 
-    class AnnotationClassTest {
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
 
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.Property"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
 
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
 
-        @Test fun isInterfaceReturnsTrue() {
-            assert(jClass.isInterface() == true)
-        }
+    it("isEnum function returns true") {
+        assert(jClass.isEnum() == true)
+    }
 
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
 
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
 
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
 
-        @Test fun accessToMemberProtectedReturnsFalse() {
-            assert(jClass.accessToMemberProtected() == false)
-        }
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
+    }
 
-        @Test(expected = IllegalStateException::class)
-        fun isThrowableReturnsFalse() {
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
+
+    it("mapToScannable function returnsEnumClass") {
+        assert(jClass.mapToScannable() is EnumClass)
+    }
+})
+
+object EnumMemberClass : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.runner.Color${'$'}PINK"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns true") {
+        assert(jClass.accessToConstructorProtected() == true)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
+    }
+
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
+
+    it("mapToScannable function returnsNormalClass") {
+        assert(jClass.mapToScannable() is EnumMember)
+    }
+})
+
+object ObjectClass : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.KuickCheck"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
+
+    it("accessToMemberProtected function returns false") {
+        assert(jClass.accessToMemberProtected() == false)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isObject function returns true") {
+        assert(jClass.isObject() == true)
+    }
+
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
+
+    it("mapToScannable function returnsSingletonClass") {
+        assert(jClass.mapToScannable() is SingletonClass)
+    }
+})
+
+object AnnotationClassSpek : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.Property"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns true") {
+        assert(jClass.isInterface() == true)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
+
+    it("accessToMemberProtected function returns false") {
+        assert(jClass.accessToMemberProtected() == false)
+    }
+
+    it("isThrowable function fails") {
+        try {
             jClass.isThrowable()
-        }
-
-        @Test fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsInterfaceClass() {
-            assert(jClass.mapToScannable() is InterfaceClass)
+            fail()
+        } catch (e: IllegalStateException) {
         }
     }
 
-    class ExceptionClassTest {
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
+    }
 
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.runner.JavaClassException"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
 
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
+    it("mapToScannable function returnsInterfaceClass") {
+        assert(jClass.mapToScannable() is InterfaceClass)
+    }
+})
 
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
+object ExceptionClassSpek : Spek({
 
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.runner.JavaClassException"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
 
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
 
-        @Test fun accessToConstructorProtectedReturnsFalse() {
-            assert(jClass.accessToConstructorProtected() == false)
-        }
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
 
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
 
-        @Test fun isThrowableReturnsTrue() {
-            assert(jClass.isThrowable() == true)
-        }
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
 
-        @Test fun isObjectReturnsFalse() {
+    it("accessToConstructorProtected function returns false") {
+        assert(jClass.accessToConstructorProtected() == false)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns true") {
+        assert(jClass.isThrowable() == true)
+    }
+
+    it("isObject function returns false") {
+        assert(jClass.isObject() == false)
+    }
+
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
+
+    it("mapToScannable function returnsThrowableClass") {
+        assert(jClass.mapToScannable() is ThrowableClass)
+    }
+})
+
+object ApiKtSpek : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.APIKt"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns false") {
+        assert(jClass.isClosure() == false)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns true") {
+        assert(jClass.accessToConstructorProtected() == true)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isObject function fails") {
+        try {
             assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsThrowableClass() {
-            assert(jClass.mapToScannable() is ThrowableClass)
+            fail()
+        } catch (e: UnsupportedOperationException) {
         }
     }
 
-    class ApiKtTest {
-
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.APIKt"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
-
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsFalse() {
-            assert(jClass.isClosure() == false)
-        }
-
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsTrue() {
-            assert(jClass.accessToConstructorProtected() == true)
-        }
-
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test(expected = UnsupportedOperationException::class)
-        fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsThrowableClass() {
-            assert(jClass.mapToScannable() is KtClass)
-        }
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
     }
 
-    class ClosureClassTest {
-
-        val jClass: JavaClass
-            get() {
-                val name = "org.mikeneck.kuickcheck.generator.AllStringGenerator${'$'}invoke${'$'}1"
-                val klass = Class.forName(name)
-                return JavaClass(name, klass)
-            }
-
-        @Test fun isNotFoundReturnsFalse() {
-            assert(jClass.isNotFound() == false)
-        }
-
-        @Test fun isInterfaceReturnsFalse() {
-            assert(jClass.isInterface() == false)
-        }
-
-        @Test fun isClosureReturnsTrue() {
-            assert(jClass.isClosure() == true)
-        }
-
-        @Test fun isEnumReturnsFalse() {
-            assert(jClass.isEnum() == false)
-        }
-
-        @Test fun accessToConstructorProtectedReturnsTrue() {
-            assert(jClass.accessToConstructorProtected() == true)
-        }
-
-        @Test fun accessToMemberProtectedReturnsTrue() {
-            assert(jClass.accessToMemberProtected() == true)
-        }
-
-        @Test fun isThrowableReturnsFalse() {
-            assert(jClass.isThrowable() == false)
-        }
-
-        @Test(expected = UnsupportedOperationException::class)
-        fun isObjectReturnsFalse() {
-            assert(jClass.isObject() == false)
-        }
-
-        @Test fun isExcludedClassReturnsFalse() {
-            assert(jClass.isExcludedClass() == false)
-        }
-
-        @Test fun mapToScannableReturnsThrowableClass() {
-            assert(jClass.mapToScannable() is Closure)
-        }
+    it("mapToScannable function returnsThrowableClass") {
+        assert(jClass.mapToScannable() is KtClass)
     }
-}
+})
+
+object ClosureClassSpek : Spek({
+
+    val jClass: JavaClass = block {
+        val name = "org.mikeneck.kuickcheck.generator.AllStringGenerator${'$'}invoke${'$'}1"
+        val klass = Class.forName(name)
+        JavaClass(name, klass)
+    }
+
+    it("isNotFound function returns false") {
+        assert(jClass.isNotFound() == false)
+    }
+
+    it("isInterface function returns false") {
+        assert(jClass.isInterface() == false)
+    }
+
+    it("isClosure function returns true") {
+        assert(jClass.isClosure() == true)
+    }
+
+    it("isEnum function returns false") {
+        assert(jClass.isEnum() == false)
+    }
+
+    it("accessToConstructorProtected function returns true") {
+        assert(jClass.accessToConstructorProtected() == true)
+    }
+
+    it("accessToMemberProtected function returns true") {
+        assert(jClass.accessToMemberProtected() == true)
+    }
+
+    it("isThrowable function returns false") {
+        assert(jClass.isThrowable() == false)
+    }
+
+    it("isObject returns false") {
+        assert(jClass.isObject() == false)
+    }
+
+    it("isExcludedClass function returns false") {
+        assert(jClass.isExcludedClass() == false)
+    }
+
+    it("mapToScannable function returnsThrowableClass") {
+        assert(jClass.mapToScannable() is Closure)
+    }
+})
 
 class JavaClassException : RuntimeException()
