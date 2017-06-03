@@ -4,6 +4,8 @@ buildscript {
     }
     dependencies {
         classpath "$kotlinGroup:$kotlinGradlePlugin:$kotlinVersion"
+        classpath "$dokkaGroup:$dokkaGradlePlugin:$dokkaVersion"
+        classpath "$junitPlatform:$junitPlatformPlugin:$junitPlatformVersion"
     }
 }
 
@@ -12,6 +14,13 @@ ext {
     encoding = 'UTF-8'
     canRelease = {
         project.hasProperty('sonatypeUrl') && project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+    }
+
+    releaseProject = { Project p ->
+        p.apply from: rootProject.file('module.gradle')
+        if (canRelease()) {
+            p.apply from: rootProject.file('release.gradle')
+        }
     }
 }
 
@@ -34,87 +43,19 @@ subprojects {
 }
 
 project(':core') {
-    apply plugin: 'maven'
-    apply plugin: 'signing'
     apply from: 'generate-source.gradle'
+    releaseProject(project)
 
     dependencies {
+        compile project(':api')
         compile "$kotlinGroup:$kotlinReflect:$kotlinVersion"
         testCompile 'junit:junit:4.12'
     }
 
     tasks.compileKotlin.dependsOn 'generateSource'
 
-    jar {
-        baseName = parent.name
-        appendix = project.name
-    }
-
     sourceSets {
         main.kotlin.srcDirs += 'src/main/generated'
-    }
-
-    task javadocJar(type: Jar) {
-        baseName = project.parent.name
-        appendix = project.name
-        classifier = 'javadoc'
-        from tasks.javadoc
-    }
-
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-
-    artifacts {
-        archives tasks.javadocJar, tasks.sourcesJar
-    }
-
-    signing {
-        sign configurations.archives
-    }
-
-    if (canRelease()) {
-        uploadArchives {
-            repositories {
-                mavenDeployer {
-                    beforeDeployment { MavenDeployment deployment ->
-                        signing.signPom(deployment)
-                    }
-                    repository(url: sonatypeUrl) {
-                        //noinspection GroovyAssignabilityCheck
-                        authentication(userName: sonatypeUsername, password: sonatypePassword)
-                    }
-                    pom.project {
-                        name 'KuickCheck'
-                        packaging 'jar'
-                        description 'Property based testing framework for Kotlin'
-                        url 'https://github.com/mike-neck/kuickcheck'
-
-                        scm {
-                            connection 'scm:git:https://github.com/mike-neck/kuickcheck'
-                            developerConnection 'scm:git:https://github.com/mike-neck/kuickcheck'
-                            url 'https://github.com/mike-neck/kuickcheck'
-                        }
-
-                        licenses {
-                            license {
-                                name 'The Apache Software License, Version 2.0'
-                                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                            }
-                        }
-
-                        developers {
-                            developer {
-                                id 'mikeneck'
-                                name 'Shinya Mochida'
-                                email 'jkrt3333[at]gmail.com'
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -123,19 +64,32 @@ project(':example') {
         testCompile project(':core')
     }
 
-    task showRuntime {
-        doLast {
-            sourceSets.test.runtimeClasspath.each {
-                println it
-            }
-        }
-    }
-
     task kuickcheck(type: JavaExec, description: 'Run checks') {
         classpath sourceSets.test.runtimeClasspath
         main = 'org.mikeneck.kuickcheck.KuickCheck'
         standardOutput = System.out
         //noinspection GroovyAssignabilityCheck
         args '--debug'
+    }
+}
+
+project(':api') {
+    releaseProject(project)
+}
+
+project(':report') {
+    releaseProject(project)
+
+    dependencies {
+        compile project(':core')
+    }
+}
+
+project(':runner') {
+    releaseProject(project)
+
+    dependencies {
+        compile project(':core')
+        compile project(':report')
     }
 }

@@ -8,4 +8,9 @@
 
 core/src/main/generated/
 
-_*/
+_builds/
+_cache/
+_projects/
+_steps/
+
+

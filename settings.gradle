@@ -1,2 +1,6 @@
-include 'core', 'example'
+include 'core'
+include 'example'
+include 'runner'
+include 'api'
+include 'report'
 rootProject.name = 'kuickcheck'
