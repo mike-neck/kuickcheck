@@ -66,6 +66,7 @@ object GenSpec : Spek({
     }
 
     group("Checking Gen's Monad laws") {
+
         it("satisfies left identity law(seed: $seed): return a >>= f == f a") {
             val r = Random(seed)
             val x = r.nextInt()
@@ -75,6 +76,16 @@ object GenSpec : Spek({
                 val size = Size(it.toInt() + 1)
 
                 assert(Gen.pure(x).flatMap(intToGenChar).generate(first)(size) == intToGenChar(x).generate(second)(size))
+            }
+        }
+
+        it("satisfies right identity law(seed: $seed): gen >>= return == gen") {
+            (0L..1000L step s).forEach {
+                val first = gen(it)
+                val second = gen(it)
+                val size = Size(it.toInt() + 1)
+
+                assert(int().flatMap(Gen.Companion::pure).generate(first)(size) == int().generate(second)(size))
             }
         }
     }
