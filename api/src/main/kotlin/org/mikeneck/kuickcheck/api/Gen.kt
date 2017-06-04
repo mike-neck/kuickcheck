@@ -38,5 +38,5 @@ interface Gen<out A> {
 
     operator fun <B> get(g: Gen<B>): Gen<Pair<A, B>> = flatMap { a: A -> g.map { b: B -> a to b } }
     operator fun <B> get(f: () -> Gen<B>): Gen<Pair<A, B>> = flatMap { a: A -> f().map { b: B -> a to b } }
-    operator fun <B> get(f: (A) -> Gen<B>): Gen<Pair<A, B>> = flatMap { a: A -> f(a).map { b: B -> a to b } }
+//    operator fun <B> get(f: (A) -> Gen<B>): Gen<Pair<A, B>> = flatMap { a: A -> f(a).map { b: B -> a to b } }
 }

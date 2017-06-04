@@ -18,9 +18,11 @@ package org.mikeneck.kuickcheck.api
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.lifecycle.LifecycleAware
+import org.mikeneck.kuickcheck.api.GenSpec.charToGenString
 import org.mikeneck.kuickcheck.api.GenSpec.gen
 import org.mikeneck.kuickcheck.api.GenSpec.identity
 import org.mikeneck.kuickcheck.api.GenSpec.intToChar
+import org.mikeneck.kuickcheck.api.GenSpec.intToGenChar
 import org.mikeneck.kuickcheck.api.GenSpec.plus
 import org.mikeneck.kuickcheck.api.GenSpec.toUpper
 import java.util.*
@@ -29,11 +31,6 @@ object GenSpec : Spek({
 
     val int: LifecycleAware<Gen<Int>> = memoized {
         mkGen { gen: KcGen, s: Size -> gen.nextInt(s.max % 26 + 1) - 1 }
-    }
-
-    val intToGenChar: (Int) -> Gen<Char> = { x: Int ->
-        fun add26WhenMinus(n: Int) = if (n < 0) n + 26 else n
-        mkGen { gen: KcGen, s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() }
     }
 
     val seed = Date().time
@@ -88,10 +85,36 @@ object GenSpec : Spek({
                 assert(int().flatMap(Gen.Companion::pure).generate(first)(size) == int().generate(second)(size))
             }
         }
+
+        it("satisfies associative law(seed: $seed): (m >>= f) >>= g == m >>= (\\x -> f x >>= g)") {
+            val left: Gen<String> = int().flatMap(intToGenChar).flatMap(charToGenString)
+            val right: Gen<String> = int().flatMap { i: Int -> intToGenChar(i).flatMap(charToGenString) }
+
+            (0L..1000L step s).forEach {
+                val first = gen(it)
+                val second = gen(it)
+                val size = Size(it.toInt() + 1)
+
+                assert(left.generate(first)(size) === right.generate(second)(size))
+            }
+        }
     }
 }) {
     val intToChar: (Int) -> Char = { 'a'.toInt().plus(it).toChar() }
     val toUpper: (Char) -> Char = { it.toUpperCase() }
+
+    val intToGenChar: (Int) -> Gen<Char> = { x: Int ->
+        fun add26WhenMinus(n: Int) = if (n < 0) n + 26 else n
+        mkGen { gen: KcGen, s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() }
+    }
+
+    val charToGenString: (Char) -> Gen<String> = { c: Char ->
+        mkGen { gen: KcGen, s: Size ->
+            (1..gen.nextInt(s.max))
+                    .map { if (it % 11 == 0) c else gen.nextInt(26).let(intToChar) }
+                    .joinToString("")
+        }
+    }
 
     fun <A> identity(): (A) -> A = { it }
 
