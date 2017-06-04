@@ -23,6 +23,7 @@ import org.mikeneck.kuickcheck.api.GenSpec.identity
 import org.mikeneck.kuickcheck.api.GenSpec.intToChar
 import org.mikeneck.kuickcheck.api.GenSpec.plus
 import org.mikeneck.kuickcheck.api.GenSpec.toUpper
+import java.util.*
 
 object GenSpec : Spek({
 
@@ -30,13 +31,20 @@ object GenSpec : Spek({
         mkGen { gen: KcGen -> mkSized { s: Size -> gen.nextInt(s.max % 26 + 1) - 1 } }
     }
 
-    group("Checking Gen's functor laws") {
+    val intToGenChar: (Int) -> Gen<Char> = { x: Int ->
+        fun add26WhenMinus(n: Int) = if (n < 0) n + 26 else n
+        mkGen { gen: KcGen -> mkSized { s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() } }
+    }
 
-        it("satisfies associative law: fmap (g . f) gen = fmap g $ fmap f gen") {
+    val seed = Date().time
+    val s = Random(seed).nextInt(10).toLong() + 1L
+
+    group("Checking Gen's functor laws") {
+        it("satisfies associative law(seed: $seed): fmap (g . f) gen = fmap g $ fmap f gen") {
             val oneByOne = int().map(intToChar).map(toUpper)
             val composition = int().map(intToChar + toUpper)
 
-            (10L..1000L step 10L).forEach {
+            (0L..1000L step s).forEach {
                 val first = gen(it)
                 val second = gen(it)
                 val size = Size(it.toInt())
@@ -44,15 +52,29 @@ object GenSpec : Spek({
             }
         }
 
-        it("satisfies identity law: fmap id gen = gen") {
+        it("satisfies identity law(seed: $seed): fmap id gen = gen") {
             val mapped = int().map(identity())
             val original = int()
 
-            (10L..1000L step 10L).forEach {
+            (0L..1000L step s).forEach {
                 val first = gen(it)
                 val second = gen(it)
-                val size = Size(it.toInt())
+                val size = Size(it.toInt() + 1)
                 assert(mapped.generate(first)(size) == original.generate(second)(size))
+            }
+        }
+    }
+
+    group("Checking Gen's Monad laws") {
+        it("satisfies left identity law(seed: $seed): return a >>= f == f a") {
+            val r = Random(seed)
+            val x = r.nextInt()
+            (0L..1000L step s).forEach {
+                val first = gen(it)
+                val second = gen(it)
+                val size = Size(it.toInt() + 1)
+
+                assert(Gen.pure(x).flatMap(intToGenChar).generate(first)(size) == intToGenChar(x).generate(second)(size))
             }
         }
     }

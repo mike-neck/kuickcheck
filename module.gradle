@@ -3,8 +3,13 @@ apply plugin: dokkaPlugin
 apply plugin: junitPlugin
 
 dependencies {
-    testCompile "$spekGroup:$spekApi:$spekVersion"
+    testCompile "$kotlinGroup:$kotlinReflect:$kotlinVersion"
+    testCompile ("$spekGroup:$spekApi:$spekVersion") {
+        //noinspection GroovyAssignabilityCheck
+        exclude module: kotlinReflect
+    }
     testCompile ("$spekGroup:$spekJunitPlatform:$spekVersion") {
+        //noinspection GroovyAssignabilityCheck
         exclude module: kotlinReflect
     }
 }
