@@ -17,10 +17,8 @@
 
 package org.mikeneck.kuickcheck.api
 
-inline fun <A> mkGen(crossinline f: (KcGen) -> Sized<A>): Gen<A> = object : Gen<A> {
-    override fun generate(gen: KcGen): Sized<A> = f(gen)
-}
-
-inline fun <A> mkSized(crossinline f: (Size) -> A): Sized<A> = object : Sized<A> {
-    override fun invoke(int: Size): A = f(int)
+inline fun <A> mkGen(crossinline f: (KcGen, Size) -> A): Gen<A> = object : Gen<A> {
+    override fun generate(gen: KcGen): Sized<A> = object : Sized<A> {
+        override fun invoke(size: Size): A = f(gen, size)
+    }
 }

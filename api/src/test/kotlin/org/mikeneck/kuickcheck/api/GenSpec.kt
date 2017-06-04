@@ -28,12 +28,12 @@ import java.util.*
 object GenSpec : Spek({
 
     val int: LifecycleAware<Gen<Int>> = memoized {
-        mkGen { gen: KcGen -> mkSized { s: Size -> gen.nextInt(s.max % 26 + 1) - 1 } }
+        mkGen { gen: KcGen, s: Size -> gen.nextInt(s.max % 26 + 1) - 1 }
     }
 
     val intToGenChar: (Int) -> Gen<Char> = { x: Int ->
         fun add26WhenMinus(n: Int) = if (n < 0) n + 26 else n
-        mkGen { gen: KcGen -> mkSized { s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() } }
+        mkGen { gen: KcGen, s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() }
     }
 
     val seed = Date().time
