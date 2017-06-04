@@ -4,7 +4,9 @@ apply plugin: junitPlugin
 
 dependencies {
     testCompile "$spekGroup:$spekApi:$spekVersion"
-    testCompile "$spekGroup:$spekJunitPlatform:$spekVersion"
+    testCompile ("$spekGroup:$spekJunitPlatform:$spekVersion") {
+        exclude module: kotlinReflect
+    }
 }
 
 jar {
