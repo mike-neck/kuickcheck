@@ -15,15 +15,52 @@
  */
 package org.mikeneck.kuickcheck.api
 
+/**
+ * Randomly generates test values for given type.
+ *
+ * @param A The type of value to be generated.
+ *
+ * @since 1.0
+ */
 interface Gen<out A> {
+    /**
+     * generates adjustable random value for given type.
+     *
+     * @param gen Generator of random.
+     * @return [Sized]
+     * @since 1.0
+     */
     fun generate(gen: KcGen): Sized<A>
 
+    /**
+     * maps a transform function to another type.
+     *
+     * @param f transform function from type [A] to [B].
+     * @param B the type to be transformed.
+     * @return [Gen] - a transformed random value generator.
+     * @since 1.0
+     */
     fun <B> map(f: (A) -> B): Gen<B> = mkGen { gen: KcGen, s: Size -> this@Gen.generate(gen)(s).let(f) }
 
+    /**
+     * maps a transform function to another type with flattening.
+     *
+     * @param f transform function from type [A] to [B].
+     * @param B the type to be transformed.
+     * @return [Gen] - a transformed random value generator flattened.
+     * @since 1.0
+     */
     fun <B> flatMap(f: (A) -> Gen<B>): Gen<B> = mkGen { gen: KcGen, s: Size ->
         f(this@Gen.generate(gen)(s)).generate(gen)(s)
     }
 
+    /**
+     * filters a generated value with given predicates.
+     *
+     * @param p predicates a generated value.
+     * @return [Gen] - a random filtered value generator.
+     * @since 1.0
+     */
     fun filter(p: (A) -> Boolean): Gen<A> = mkGen { gen: KcGen, s: Size ->
         val a = this@Gen.generate(gen)(s)
         tailrec fun retry(x: A): A {
@@ -33,6 +70,12 @@ interface Gen<out A> {
     }
 
     companion object {
+        /**
+         * creates a generator which only generates the given value.
+         *
+         * @param x the value to be returned.
+         * @return [Gen] - the generator only returns the given value.
+         */
         fun <A> pure(x: A): Gen<A> = mkGen { _, _ -> x }
     }
 }

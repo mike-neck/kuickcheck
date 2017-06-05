@@ -15,7 +15,26 @@
  */
 package org.mikeneck.kuickcheck.api
 
+/**
+ * Randomly generates values for tests and shrinks a value causing a test failure.
+ *
+ * @param A The type of value to be generated.
+ *
+ * @since 1.0
+ */
 interface Arbitrary<A> {
+
+    /**
+     * Generates values for given type.
+     *
+     * @since 1.0
+     */
     fun arbitrary(): Gen<A>
+
+    /**
+     * Shrinks a value causing a test failure.
+     *
+     * @since 1.0
+     */
     fun shrink(original: A): List<A>
 }

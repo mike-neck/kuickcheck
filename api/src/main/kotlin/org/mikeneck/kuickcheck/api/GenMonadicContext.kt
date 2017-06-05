@@ -15,11 +15,25 @@
  */
 package org.mikeneck.kuickcheck.api
 
+/**
+ * A [Gen] with do notation support.
+ *
+ * @since 1.0
+ */
 abstract class GenMonadicContext<C, A>(val gen: Gen<Pair<C, A>>) : Gen<A> {
     override fun generate(gen: KcGen): Sized<A> = object : Sized<A> {
         override fun invoke(size: Size): A = this@GenMonadicContext.gen.generate(gen)(size).second
     }
 
+    /**
+     * do notation support.
+     *
+     * @param f a transform function from type [A] to [B].
+     * Its parameter is given from a context [C] and holding type [A].
+     * @param B the type to be transformed.
+     * @return [Gen] a transformed random value generator.
+     * @since 1.0
+     */
     operator fun <B> get(f: (Pair<C, A>) -> Gen<B>): GenMonadicContext<Pair<C, A>, B> =
             object : GenMonadicContext<Pair<C, A>, B>(flatMap { _: A ->
                 mkGen { kcGen, size ->
@@ -30,15 +44,21 @@ abstract class GenMonadicContext<C, A>(val gen: Gen<Pair<C, A>>) : Gen<A> {
             }) {}
 
     companion object {
-        fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
+        internal fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
 
-        fun <A, B, C> Pair<A, B>.mkPair(f: (Pair<A, B>) -> C): Pair<Pair<A, B>, C> = this to f(this)
+        internal fun <A, B, C> Pair<A, B>.mkPair(f: (Pair<A, B>) -> C): Pair<Pair<A, B>, C> = this to f(this)
+
+        internal fun <A, B, C> ((A) -> Gen<B>).withPair(): (Pair<C, A>) -> Gen<B> = { (_, a) -> this(a) }
 
         fun <A> Gen<A>.doing(): GenMonadicContext<Unit, A> =
                 object : GenMonadicContext<Unit, A>(this@doing.map { Unit to it }) {}
 
+        /**
+         * creates a generator which only generates the given value.
+         *
+         * @param x the value to be returned.
+         * @return [Gen] - the generator only returns the given value.
+         */
         fun <A> pure(x: A): GenMonadicContext<Unit, A> = Gen.pure(x).doing()
-
-        fun <A, B, C> ((A) -> Gen<B>).withPair(): (Pair<C, A>) -> Gen<B> = { (_, a) -> this(a) }
     }
 }
