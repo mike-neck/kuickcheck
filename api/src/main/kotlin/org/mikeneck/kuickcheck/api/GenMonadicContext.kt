@@ -20,24 +20,18 @@ abstract class GenMonadicContext<C, A>(val gen: Gen<Pair<C, A>>) : Gen<A> {
         override fun invoke(size: Size): A = this@GenMonadicContext.gen.generate(gen)(size).second
     }
 
-    fun <B> __flat__map(f: (A) -> Gen<B>): GenMonadicContext<Pair<C, A>, B> =
-            object : GenMonadicContext<Pair<C, A>, B>(flatMap { a: A ->
+    operator fun <B> get(f: (Pair<C, A>) -> Gen<B>): GenMonadicContext<Pair<C, A>, B> =
+            object : GenMonadicContext<Pair<C, A>, B>(flatMap { _: A ->
                 mkGen { kcGen, size ->
-                    this@GenMonadicContext.gen.generate(kcGen)(size).map(toPairMap(f)).move().map { gb ->
+                    this@GenMonadicContext.gen.generate(kcGen)(size).mkPair(f).map { gb: Gen<B> ->
                         gb.generate(kcGen)(size)
                     }
                 }
             }) {}
 
     companion object {
-        fun <A, B, C> Pair<Pair<A, B>, C>.flatten(): Triple<A, B, C> =
-                Triple(this.first.first, this.first.second, this.second)
-
         fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
 
-        fun <A, B> toPairMap(f: (A) -> B): (A) -> Pair<A, B> = { a: A -> a to f(a) }
-
-        fun <A, B, C> Pair<A, Pair<B, C>>.move(): Pair<Pair<A, B>, C> =
-                (this.first to this.second.first) to this.second.second
+        fun <A, B, C> Pair<A, B>.mkPair(f: (Pair<A, B>) -> C): Pair<Pair<A, B>, C> = this to f(this)
     }
 }
