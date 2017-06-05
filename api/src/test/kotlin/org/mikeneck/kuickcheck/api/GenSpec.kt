@@ -18,13 +18,13 @@ package org.mikeneck.kuickcheck.api
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.lifecycle.LifecycleAware
-import org.mikeneck.kuickcheck.api.GenSpec.charToGenString
+import org.mikeneck.kuickcheck.api.Functions.charToGenString
+import org.mikeneck.kuickcheck.api.Functions.identity
+import org.mikeneck.kuickcheck.api.Functions.intToChar
+import org.mikeneck.kuickcheck.api.Functions.intToGenChar
+import org.mikeneck.kuickcheck.api.Functions.plus
+import org.mikeneck.kuickcheck.api.Functions.toUpper
 import org.mikeneck.kuickcheck.api.GenSpec.gen
-import org.mikeneck.kuickcheck.api.GenSpec.identity
-import org.mikeneck.kuickcheck.api.GenSpec.intToChar
-import org.mikeneck.kuickcheck.api.GenSpec.intToGenChar
-import org.mikeneck.kuickcheck.api.GenSpec.plus
-import org.mikeneck.kuickcheck.api.GenSpec.toUpper
 import java.util.*
 
 object GenSpec : Spek({
@@ -100,26 +100,6 @@ object GenSpec : Spek({
         }
     }
 }) {
-    val intToChar: (Int) -> Char = { 'a'.toInt().plus(it).toChar() }
-    val toUpper: (Char) -> Char = { it.toUpperCase() }
-
-    val intToGenChar: (Int) -> Gen<Char> = { x: Int ->
-        fun add26WhenMinus(n: Int) = if (n < 0) n + 26 else n
-        mkGen { gen: KcGen, s: Size -> (gen.nextInt(add26WhenMinus((s.max + x) % 26) + 1) - 1).toChar() }
-    }
-
-    val charToGenString: (Char) -> Gen<String> = { c: Char ->
-        mkGen { gen: KcGen, s: Size ->
-            (1..gen.nextInt(s.max))
-                    .map { if (it % 11 == 0) c else gen.nextInt(26).let(intToChar) }
-                    .joinToString("")
-        }
-    }
-
-    fun <A> identity(): (A) -> A = { it }
-
-    inline infix operator
-    fun <A : Any, B : Any, C : Any> ((A) -> B).plus(crossinline f: (B) -> C): (A) -> C = { a: A -> a.let(this).let(f) }
 
     fun gen(seed: Long): KcGen = JavaUtilRandom(seed)
 }

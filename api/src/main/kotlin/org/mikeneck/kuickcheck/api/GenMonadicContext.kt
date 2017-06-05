@@ -33,5 +33,12 @@ abstract class GenMonadicContext<C, A>(val gen: Gen<Pair<C, A>>) : Gen<A> {
         fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
 
         fun <A, B, C> Pair<A, B>.mkPair(f: (Pair<A, B>) -> C): Pair<Pair<A, B>, C> = this to f(this)
+
+        fun <A> Gen<A>.doing(): GenMonadicContext<Unit, A> =
+                object : GenMonadicContext<Unit, A>(this@doing.map { Unit to it }) {}
+
+        fun <A> pure(x: A): GenMonadicContext<Unit, A> = Gen.pure(x).doing()
+
+        fun <A, B, C> ((A) -> Gen<B>).withPair(): (Pair<C, A>) -> Gen<B> = { (_, a) -> this(a) }
     }
 }
