@@ -15,15 +15,15 @@
  */
 package org.mikeneck.kuickcheck.api
 
-abstract class Describe(val description: String, val optionConfig: Nothing) {
+abstract class Describe(val overview: String, val optionConfig: Nothing) {
 
     abstract val check: Testable
 
-    fun prop(title: String): Qualifier = object : Qualifier {
+    fun prop(detail: String): Qualifier = object : Qualifier {
         override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> =
                 object : PropertyDescriptor<A> {
                     override fun satisfy(property: (A) -> Boolean): Testable =
-                            SingleTest(TestId(description, title), gen, property)
+                            SingleTest(PropertyDescription(overview, detail), gen, property)
                 }
 
     }

@@ -11,7 +11,7 @@ internal object NoTests : Testable() {
 }
 
 internal class SingleTest<A>(
-        val testId: TestId,
+        val propertyDescription: PropertyDescription,
         val gen: () -> Gen<A>,
         val property: (A) -> Boolean) : Testable() {
     override val size: Int = 1

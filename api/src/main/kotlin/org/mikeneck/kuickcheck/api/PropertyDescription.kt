@@ -15,4 +15,4 @@
  */
 package org.mikeneck.kuickcheck.api
 
-data class TestId(val description: String, val propertyTitle: String)
+data class PropertyDescription(val overview: String, val detail: String)
