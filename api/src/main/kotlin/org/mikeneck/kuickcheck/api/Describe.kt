@@ -18,14 +18,12 @@ package org.mikeneck.kuickcheck.api
 abstract class Describe(val description: String, val optionConfig: Nothing) {
 
     abstract val check: Testable
-}
-
-object KuickCheckApi {
 
     fun prop(title: String): Qualifier = object : Qualifier {
         override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> =
                 object : PropertyDescriptor<A> {
-                    override fun satisfy(property: (A) -> Boolean): Testable = SingleTest(title, gen, property)
+                    override fun satisfy(property: (A) -> Boolean): Testable =
+                            SingleTest(TestId(description, title), gen, property)
                 }
 
     }
