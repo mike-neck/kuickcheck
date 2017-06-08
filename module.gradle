@@ -35,3 +35,9 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
     from sourceSets.main.allSource
 }
+
+tasks.withType(JavaExec) {
+    if (it.path.contains('junitPlatformTest')) {
+        it.enableAssertions = true
+    }
+}

@@ -5,7 +5,7 @@ buildscript {
     dependencies {
         classpath "$kotlinGroup:$kotlinGradlePlugin:$kotlinVersion"
         classpath "$dokkaGroup:$dokkaGradlePlugin:$dokkaVersion"
-        classpath "$junitPlatform:$junitPlatformPlugin:$junitPlatformVersion"
+        classpath "$junitPlatformGroup:$junitPlatformPlugin:$junitPlatformVersion"
     }
 }
 
