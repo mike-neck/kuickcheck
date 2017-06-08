@@ -15,7 +15,7 @@
  */
 package org.mikeneck.kuickcheck.api
 
-abstract class Describe(val overview: String, val optionConfig: Nothing) {
+abstract class Describe(val overview: String, val optionConfig: Unit = Unit) {
 
     abstract val check: Testable
 

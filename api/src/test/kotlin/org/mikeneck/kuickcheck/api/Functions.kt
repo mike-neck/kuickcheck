@@ -17,6 +17,11 @@ package org.mikeneck.kuickcheck.api
 
 object Functions {
 
+    /**
+     * generator of [Int] from 0 to 99
+     */
+    val int: Gen<Int> = mkGen { kcGen, _ -> kcGen.nextInt(100) }
+
     val intToChar: (Int) -> Char = { 'a'.toInt().plus(it).toChar() }
 
     val toUpper: (Char) -> Char = { it.toUpperCase() }
