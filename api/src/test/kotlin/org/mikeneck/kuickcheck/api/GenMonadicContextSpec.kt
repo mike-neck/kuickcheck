@@ -18,6 +18,7 @@ package org.mikeneck.kuickcheck.api
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.api.lifecycle.LifecycleAware
+import org.mikeneck.kuickcheck.api.Assert.assert
 import org.mikeneck.kuickcheck.api.Functions.charToGenString
 import org.mikeneck.kuickcheck.api.Functions.identity
 import org.mikeneck.kuickcheck.api.Functions.intToChar
@@ -110,7 +111,7 @@ object GenMonadicContextSpec : Spek({
                 val (left, right) = getGen(it)
                 val size = Size(it.toInt() + 1)
 
-                assert(leftAssoc.generate(left)(size) == rightAssoc.generate(right)(size))
+                assert(leftAssoc.generate(left)(size), rightAssoc.generate(right)(size)) { l, r -> l == r }
             }
         }
     }

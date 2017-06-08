@@ -44,3 +44,28 @@ object Functions {
         }
     }
 }
+
+object Assert {
+    fun <A> assert(left: A, right: A, predicate: (A, A) -> Boolean): Unit =
+            (Capture(left) to Capture(right)).assert(predicate).whenLeft { throw AssertionError(compare(it)) }
+
+    class Capture<out A>(val item: A)
+
+    private fun <A> Pair<Capture<A>, Capture<A>>.assert(predicate: (A, A) -> Boolean):
+            Pair<Pair<Capture<A>, Capture<A>>, Boolean> =
+            this.mkPair { it.separation() }.map { predicate.tuple.invoke(it) }
+
+    private fun <A> Pair<Capture<A>, Capture<A>>.separation(): Pair<A, A> = this.first.item to this.second.item
+    private inline fun <A, B> A.mkPair(f: (A) -> B): Pair<A, B> = this to f(this)
+    private inline fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
+    private val <A, B, C> ((A, B) -> C).tuple: (Pair<A, B>) -> C get() = { p -> this(p.first, p.second) }
+
+    private inline fun <A> Pair<A, Boolean>.whenLeft(f: (A) -> Unit): Unit = if (this.second) Unit else f(this.first)
+    private fun <A> compare(pair: Pair<Capture<A>, Capture<A>>): String = pair.separation()
+            .let {
+                """
+right: ${it.second}
+left : ${it.first}
+"""
+            }
+}
