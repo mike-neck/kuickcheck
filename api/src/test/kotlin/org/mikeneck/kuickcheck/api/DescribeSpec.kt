@@ -36,5 +36,15 @@ object DescribeSpec : Spek({
             }
             assert(desc.check.size == 1)
         }
+
+        it("has many when multiple prop is called and concatenated.") {
+            val desc = object : Describe("multiple prop call") {
+                override val check: Testable get() =
+                (prop("first") forAll { int } satisfy { it < 100 }) +
+                        (prop("second") forAll { int } satisfy { it > 0 }) +
+                        (prop("third") forAll { int } satisfy { it < 0 })
+            }
+            assert(desc.check.size == 3)
+        }
     }
 })
