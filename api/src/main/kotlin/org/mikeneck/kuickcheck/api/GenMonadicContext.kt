@@ -35,20 +35,19 @@ abstract class GenMonadicContext<C, A>(val gen: Gen<Pair<C, A>>) : Gen<A> {
      * @since 1.0
      */
     operator fun <B> get(f: (Pair<C, A>) -> Gen<B>): GenMonadicContext<Pair<C, A>, B> =
-            object : GenMonadicContext<Pair<C, A>, B>(flatMap { _: A ->
-                mkGen { kcGen, size ->
-                    this@GenMonadicContext.gen.generate(kcGen)(size).mkPair(f).map { gb: Gen<B> ->
-                        gb.generate(kcGen)(size)
-                    }
-                }
-            }) {}
+            object : GenMonadicContext<Pair<C, A>, B>(gen.flatMap { p: Pair<C, A> -> f(p).map { b: B -> p to b } }) {}
 
     companion object {
         internal fun <A, B, C> Pair<A, B>.map(f: (B) -> C): Pair<A, C> = this.first to f(this.second)
 
-        internal fun <A, B, C> Pair<A, B>.mkPair(f: (Pair<A, B>) -> C): Pair<Pair<A, B>, C> = this to f(this)
+        fun <A, B, C> ((A) -> Gen<B>).withPair(): (Pair<C, A>) -> Gen<B> = { (_, a) -> this(a) }
 
-        internal fun <A, B, C> ((A) -> Gen<B>).withPair(): (Pair<C, A>) -> Gen<B> = { (_, a) -> this(a) }
+        fun <A, B, C> ((A) -> Gen<B>).withContext(): (Pair<C, A>) -> GenMonadicContext<Pair<C, A>, B> =
+                { p: Pair<C, A> ->
+                    object : GenMonadicContext<Pair<C, A>, B>(this@withContext(p.second).map { b: B ->
+                        p to b
+                    }) {}
+                }
 
         fun <A> Gen<A>.doing(): GenMonadicContext<Unit, A> =
                 object : GenMonadicContext<Unit, A>(this@doing.map { Unit to it }) {}

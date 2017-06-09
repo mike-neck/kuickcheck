@@ -27,6 +27,7 @@ import org.mikeneck.kuickcheck.api.Functions.plus
 import org.mikeneck.kuickcheck.api.Functions.toUpper
 import org.mikeneck.kuickcheck.api.GenMonadicContext.Companion.doing
 import org.mikeneck.kuickcheck.api.GenMonadicContext.Companion.pure
+import org.mikeneck.kuickcheck.api.GenMonadicContext.Companion.withContext
 import org.mikeneck.kuickcheck.api.GenMonadicContext.Companion.withPair
 import org.mikeneck.kuickcheck.api.GenMonadicContextSpec.gen
 import java.util.*
@@ -100,12 +101,10 @@ object GenMonadicContextSpec : Spek({
         }
 
         it("satisfies associative law(seed: $seed): (m >>= f) >>= g == m >>= (\\x -> f x >>= g)") {
-            val leftAssoc = int()[
-                    intToGenChar.withPair()][
-                    charToGenString.withPair()]
-            val rightAssoc = int().flatMap { a: Int ->
-                intToGenChar(a).flatMap(charToGenString)
-            }
+            val leftAssoc = int()[intToGenChar.withPair()][charToGenString.withPair()]
+            val rightAssoc = int()[{ p: Pair<Unit, Int> ->
+                intToGenChar.withContext<Int, Char, Unit>()(p)[charToGenString.withPair()]
+            }]
 
             randomLoop.forEach {
                 val (left, right) = getGen(it)
