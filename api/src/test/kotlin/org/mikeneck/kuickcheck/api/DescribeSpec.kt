@@ -46,5 +46,17 @@ object DescribeSpec : Spek({
             }
             assert(desc.check.size == 3)
         }
+
+        it("has 2 when 3 prop is called and then 1 declare ignore.") {
+            val desc = object : Describe("multiple prop call") {
+                override val check: Testable get() =
+                (prop("first") forAll { int } satisfy { it < 100 }) +
+                        (prop("second") forAll { int } satisfy { it > 0 }) +
+                        (prop("ignore") forAll { int } satisfy { it < 0 } ignore "this is fake.")
+
+            }
+            assert(desc.check.size == 3)
+            assert(desc.check.runnableCases().size == 2)
+        }
     }
 })

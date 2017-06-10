@@ -23,7 +23,7 @@ abstract class Describe(val overview: String, val optionConfig: Unit = Unit) {
         override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> =
                 object : PropertyDescriptor<A> {
                     override fun satisfy(property: (A) -> Boolean): Testable =
-                            SingleTest(PropertyDescription(overview, detail), gen, property)
+                            SingleTest(PropertyDescription(overview, detail), gen, Executability.RunCase, property)
                 }
 
     }
