@@ -15,17 +15,35 @@
  */
 package org.mikeneck.kuickcheck.api
 
-abstract class Describe(val overview: String, val optionConfig: Unit = Unit) {
+abstract class Describe(val overview: String, val spec: PropertySpec.() -> Unit) {
 
-    abstract val check: Testable
+    init {
+
+    }
+
+    val propertySpec: PropertySpec = object : PropertySpec {
+        override val testables: MutableList<Testable> = mutableListOf()
+        override val overview: String = this@Describe.overview
+
+        init {
+            this@Describe.spec(this)
+        }
+    }
+    val check: Testable get() = propertySpec.testables.fold(NoTests) { l: Testable, r: Testable -> l + r }
+}
+
+interface PropertySpec {
+
+    val testables: MutableList<Testable>
+
+    val overview: String
 
     fun prop(detail: String): Qualifier = object : Qualifier {
-        override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> =
-                object : PropertyDescriptor<A> {
-                    override fun satisfy(property: (A) -> Boolean): Testable =
-                            SingleTest(PropertyDescription(overview, detail), gen, Executability.RunCase, property)
-                }
-
+        override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> = object : PropertyDescriptor<A> {
+            override fun satisfy(property: (A) -> Boolean): Testable =
+                    SingleTest(PropertyDescription(overview, detail), gen, Executability.RunCase, property)
+                            .also { testables.add(it) }
+        }
     }
 }
 
@@ -36,3 +54,9 @@ interface Qualifier {
 interface PropertyDescriptor<out A> {
     infix fun satisfy(property: (A) -> Boolean): Testable
 }
+
+interface OptionConfig
+
+object NoImplNow : OptionConfig
+
+data class TestMetaData(val overview: String, val optionConfig: OptionConfig)
