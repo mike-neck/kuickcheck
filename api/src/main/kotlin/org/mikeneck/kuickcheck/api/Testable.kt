@@ -1,21 +1,23 @@
 package org.mikeneck.kuickcheck.api
 
-sealed class Testable {
+interface Testable {
 
-    abstract val size: Int
+    val size: Int
 
-    open val execute: Executability = Executability.RunCase
+    val execute: Executability get() = Executability.RunCase
 
-    abstract infix operator fun plus(other: Testable): Testable
+    infix operator fun plus(other: Testable): Testable
 
-    abstract infix fun ignore(reason: String): Testable
+    infix fun ignore(reason: String): Testable
 
-    abstract fun asList(): List<Testable>
+    fun asList(): List<Testable>
 
     fun runnableCases(): List<Testable> = asList().filter { it.execute is Executability.RunCase }
 }
 
-internal object NoTests : Testable() {
+sealed class TestableCase : Testable
+
+internal object NoTests : TestableCase() {
 
     override val size: Int = 0
 
@@ -30,7 +32,7 @@ internal class SingleTest<A>(
         val propertyDescription: PropertyDescription,
         val gen: () -> Gen<A>,
         override val execute: Executability,
-        val property: (A) -> Boolean) : Testable() {
+        val property: (A) -> Boolean) : TestableCase() {
 
     override fun ignore(reason: String): Testable =
             SingleTest(
@@ -41,24 +43,34 @@ internal class SingleTest<A>(
     override val size: Int = 1
 
     override fun plus(other: Testable): Testable = when (other) {
+        is TestableWrap -> plus(other.testable)
         is NoTests -> this
         is SingleTest<*> -> TestList(2, listOf(this, other), Executability.RunCase)
         is TestList -> TestList(other.size + 1, other.tests + this, Executability.RunCase)
+        else -> throw IllegalArgumentException("not supported ${other::class}")
     }
 
     override fun asList(): List<Testable> = listOf(this)
 }
 
-internal class TestList(override val size: Int, val tests: List<Testable>, override val execute: Executability) : Testable() {
+internal class TestList(override val size: Int, val tests: List<Testable>, override val execute: Executability)
+    : TestableCase() {
+
     override fun ignore(reason: String): Testable = TestList(size, tests, Executability.Ignore(reason))
 
     override fun plus(other: Testable): Testable = when (other) {
+        is TestableWrap -> plus(other.testable)
         is NoTests -> this
         is SingleTest<*> -> TestList(size + other.size, tests + other, Executability.RunCase)
         is TestList -> TestList(size + other.size, tests + other.tests, Executability.RunCase)
+        else -> throw IllegalArgumentException("not supported ${other::class}")
     }
 
     override fun asList(): List<Testable> = tests
+}
+
+class TestableWrap(val testable: Testable) : Testable by testable {
+    operator fun get(testable: Testable): TestableWrap = TestableWrap(this + testable)
 }
 
 sealed class Executability {

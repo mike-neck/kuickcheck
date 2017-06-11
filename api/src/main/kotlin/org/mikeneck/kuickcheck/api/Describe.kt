@@ -15,35 +15,22 @@
  */
 package org.mikeneck.kuickcheck.api
 
-abstract class Describe(val overview: String, val spec: PropertySpec.() -> Unit) {
+abstract class Describe(val overview: String, val optionConfig: OptionConfig) {
 
-    init {
+    constructor(overview: String) : this(overview, NoImplNow)
 
-    }
-
-    val propertySpec: PropertySpec = object : PropertySpec {
-        override val testables: MutableList<Testable> = mutableListOf()
-        override val overview: String = this@Describe.overview
-
-        init {
-            this@Describe.spec(this)
-        }
-    }
-    val check: Testable get() = propertySpec.testables.fold(NoTests) { l: Testable, r: Testable -> l + r }
-}
-
-interface PropertySpec {
-
-    val testables: MutableList<Testable>
-
-    val overview: String
+    abstract val check: Testable
 
     fun prop(detail: String): Qualifier = object : Qualifier {
         override fun <A : Any> forAll(gen: () -> Gen<A>): PropertyDescriptor<A> = object : PropertyDescriptor<A> {
             override fun satisfy(property: (A) -> Boolean): Testable =
-                    SingleTest(PropertyDescription(overview, detail), gen, Executability.RunCase, property)
-                            .also { testables.add(it) }
+                    SingleTest(PropertyDescription(this@Describe.overview, detail), gen, Executability.RunCase, property)
         }
+    }
+
+    companion object {
+        val newTest: TestableWrap = TestableWrap(NoTests)
+        val noTest: Testable = NoTests
     }
 }
 
